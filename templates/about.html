@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+    <h1> About </h1>
+    
+    <p> blah blah we're amazing blahh</p>
+
+    <p> Get started with us </p> 
+    <a href="{{ ( url_for('registration') ) }}"> Sign up now! </a>
+
+    <p> Get started with us </p> 
+    <a href="{{ ( url_for('login') ) }}"> Sign in! </a>
+{% endblock %}
