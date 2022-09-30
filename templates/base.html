@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+     <meta charset="utf-8" />
+     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+        <title> {{ title }} </title>
+    </head>
+
+    <nav>
+        {% if g.user %}
+        <a href="{{ ( url_for('user_house') ) }}"> Home </a>
+        <a href="{{ ( url_for('profile') ) }}"> My Profile </a>
+        <a href="{{ ( url_for('settings') ) }}"> Settings </a>
+        <a href="{{ ( url_for('logout') ) }}"> Logout </a>
+        {% else %}
+        <a href="{{ ( url_for('index') ) }}"> Home </a>
+        <a href="{{ ( url_for('about') ) }}"> About </a>
+        <a href="{{ ( url_for('product') ) }}"> Our Solution </a>
+        <a href="{{ ( url_for('demo') ) }}"> Demo </a>
+        <a href="{{ ( url_for('registration') ) }}"> Register </a>
+        <a href="{{ ( url_for('login') ) }}"> Login </a>
+        {% endif %}
+    </nav>
+
+    <body>
+        {% block main_content %} {% endblock %}
+    </body>
+
+    <footer> © All rights reserved <br> The Best Group </footer>
+</html>
