@@ -19,8 +19,3 @@ CREATE TABLE rooms
     time_off TIME (0),
     time_on TIME (0)
 );
-
-CREATE TABLE test
-(
-    temp INTEGER
-);
