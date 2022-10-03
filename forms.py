@@ -18,3 +18,7 @@ class LoginForm(FlaskForm):
     password = PasswordField("Password", validators=[InputRequired()])
     password2 = PasswordField("Confirm password", validators=[InputRequired("Password doesn't match"), EqualTo("password")])
     submit = SubmitField("Login")
+
+class RoomForm(FlaskForm):
+    currentTemp = StringField('Enter the current temperature: ', validators=[InputRequired()])
+    submit = SubmitField("Submit")
