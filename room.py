@@ -10,3 +10,4 @@ class room():
     def checkTempPeriodically(self):
     #should specifiy when to kick in scheduled heating
     def scheduling(self):
+        # test
