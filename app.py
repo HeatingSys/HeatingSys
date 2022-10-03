@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, session, g, flash, Markup, request, make_response
-from forms import RegistrationForm, LoginForm
+from forms import RegistrationForm, LoginForm, RoomForm
 from database import get_db, close_db
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -7,6 +7,7 @@ from datetime import datetime
 from functools import wraps
 from random import sample
 from itertools import * 
+from test import *
 
 # BEST VIEWED ON PC/LAPTOP
 
@@ -143,6 +144,8 @@ def profile():
 @app.route("/user_house")
 def user_house():
     return render_template("user_house.html", title="Home")
+
+#@app.route("/newRoom", methods=["GET", "POST"])
 
 if __name__ == '__main__':
    app.run(debug = True)

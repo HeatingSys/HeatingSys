@@ -86,3 +86,14 @@ footer {
 img {
     max-width: 100%;
 }
+
+.flash  {
+    margin: 2% 0% 2% 0%;
+} 
+
+.flash p:first-child {
+    display: inline;
+    background-color: pink;
+    font-size: 1.3rem;
+    padding: 1% 2% 1% 2%;
+}
