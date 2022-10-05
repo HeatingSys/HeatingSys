@@ -42,29 +42,29 @@ def login_required(view):
 # 404 error page
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('oh_no.html', name="Error"), 404
+    return render_template('oh_no.html', title="Error"), 404
 
 # Home page
 @app.route("/")
 def index():
     db = get_db() 
-    return render_template("index.html", name="Home")
+    return render_template("index.html", title="Home")
 
 # About page
 @app.route("/about")
 def about():
-    return render_template("about.html", name="About")
+    return render_template("about.html", title="About")
 
 # Our Solution page
 @app.route("/product")
 def product():
     db = get_db()
-    return render_template("product.html", name="Our Solution")
+    return render_template("product.html", title="Our Solution")
 
 # Product Demo page
 @app.route("/demo")
 def demo():
-    return render_template("demo.html", name="Demo")
+    return render_template("demo.html", title="Demo")
 
 # Register for an account
 @app.route("/registration", methods=["GET", "POST"])
@@ -88,12 +88,12 @@ def registration():
             db.commit()
             flash("Successful Registration! Please login now")
             return redirect( url_for("login"))
-    return render_template("register.html", form=form, name="Register")
+    return render_template("register.html", form=form, title="Register")
 
 # Shows terms and conditions
 @app.route("/terms")
 def terms():
-    return render_template("terms_con.html", name="Terms and Conditions")
+    return render_template("terms_con.html", title="Terms and Conditions")
 
 # Login to account
 @app.route("/login", methods=["GET", "POST"])
@@ -121,7 +121,7 @@ def login():
             session.clear()
             session["username"] = username
             return redirect(url_for("profile"))
-    return render_template("login.html", form=form, name="Login")
+    return render_template("login.html", form=form, title="Login")
 
 # Logout from account
 @app.route("/logout")
@@ -132,12 +132,12 @@ def logout():
 # Settings page
 @app.route("/settings")
 def settings():
-    return render_template("settings.html", name="Settings")
+    return render_template("settings.html", title="Settings")
 
 # Profile page
 @app.route("/profile")
 def profile():
-    return render_template("profile.html", name="My Profile")
+    return render_template("profile.html", title="My Profile")
 
 # House page
 @app.route("/user_house", methods=["GET", "POST"])
@@ -161,7 +161,7 @@ def user_house():
     else:
         db = get_db()
         rooms = db.execute("""SELECT * FROM rooms WHERE username=?;""", (g.user,)).fetchall()
-    return render_template("user_house.html", form=form, name="Home", rooms=rooms)
+    return render_template("user_house.html", form=form, title="Home", rooms=rooms)
 
 # Room page
 @app.route("/show_room/<int:id>")
@@ -169,7 +169,7 @@ def user_house():
 def show_room(id):
     db = get_db()
     room = db.execute("""SELECT * FROM rooms WHERE username=? AND room_id=?;""", (g.user,id)).fetchone()
-    return render_template("show_room.html", name="Room", room=room)
+    return render_template("show_room.html", title="Room", room=room)
 
 # Deletes Room
 @app.route("/delete_room/<int:id>")
