@@ -2,4 +2,56 @@
 
 {% block main_content %}
     <h1> Bruv yo house </h1>
+    <form action="" method="post" novalidate> 
+        {{ form.hidden_tag() }}
+    
+        {{ form.name.label }}
+        {{ form.name(class="text", placeholder="Give the room a name!") }}
+        {% for error in form.name.errors %}
+            {{ error }}
+        {% endfor %}
+        <br>
+        {{ form.automation.label }}
+        {{ form.automation() }}
+        {% for error in form.automation.errors %}
+            {{ error }}
+        {% endfor %}
+        <br>
+        {{ form.submit(class="submit") }}
+    </form>  
+
+     <div class="flash">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p> {{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>    
+
+    {% if rooms %}
+    <table>
+        <caption> My room </caption>
+        <tr>
+            <th> Name </th>
+            <th> Automation Tool </th>
+            <th> </th>
+            <th> </th>
+        </tr>
+
+        {% for entry in rooms %}
+        <tr> 
+            <td> {{ entry["name"] }} </td>
+            <td> {{ entry["automation"] }} </td>
+            <td> <a href="{{ url_for('show_room', id=entry['room_id']) }}"> Room Details </a> </td> 
+            <td> <a href="{{ url_for('delete_room', id=entry['room_id']) }}"> Delete </a> </td>
+        </tr>
+        {% endfor %}
+
+        {% else %}
+        <p> Bruh your house got no rooms ?!</p> 
+        {% endif %}
+    </table>  
+
 {% endblock %}
