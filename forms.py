@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm 
-from wtforms import StringField, PasswordField, BooleanField, TimeField, SubmitField, validators, SelectField, TextAreaField, RadioField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, validators, SelectField, TextAreaField, RadioField, TimeField
 from wtforms.widgets import TextArea
 from wtforms.validators import InputRequired, EqualTo
 from wtforms.fields.html5 import DateField
@@ -22,10 +22,10 @@ class LoginForm(FlaskForm):
 class RoomForm(FlaskForm):
     name = StringField("Name", validators=[InputRequired()])
     automation = BooleanField("Energy automation tool", validators=[InputRequired()])
-    submit = SubmitField("Submit")
+    submit = SubmitField("Save")
 
 class ScheduleForm(FlaskForm):
     desiredTemp = StringField('Enter the desired temperature: ', validators=[InputRequired()])
-    startTime = TimeField("Start at",validators=[InputRequired()])
-    endTime = TimeField("End at",validators=[InputRequired()])
-    submit = SubmitField("Save diary")
+    startTime = StringField("Start at", validators=[InputRequired()])
+    endTime = StringField("End at", validators=[InputRequired()])
+    submit = SubmitField("Save")

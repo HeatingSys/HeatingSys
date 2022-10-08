@@ -20,7 +20,7 @@ Session(app)
 
 ''' Testing purposes login
     username: test-dev
-    password zxc10!Z
+    password: zxc10!Z
 '''
 
 @app.teardown_appcontext
@@ -44,11 +44,13 @@ def login_required(view):
 def page_not_found(e):
     return render_template('oh_no.html', title="Error"), 404
 
+now = datetime.now().strftime("%H:%M")
+
 # Home page
 @app.route("/")
 def index():
-    db = get_db() 
-    return render_template("index.html", title="Home")
+    db = get_db()
+    return render_template("index.html", title="Home", now=now)
 
 # About page
 @app.route("/about")
@@ -140,36 +142,45 @@ def profile():
     return render_template("profile.html", title="My Profile")
 
 # House page
-@app.route("/user_house", methods=["GET", "POST"])
-def user_house():
+@app.route("/house", methods=["GET", "POST"])
+def house():
     form = RoomForm()
     rooms = None
+    db = get_db()
     if form.validate_on_submit():
         automation = form.automation.data
         name = form.name.data
         
-        db = get_db()
         db.execute("""INSERT INTO rooms (username, name, automation)
                         VALUES (?,?,?);""", (g.user, name, automation))
         db.commit()
         
-        room = db.execute("""SELECT * FROM rooms WHERE room_id in 
+        rooms = db.execute("""SELECT * FROM rooms WHERE room_id in 
                                 (SELECT max(room_id) FROM rooms WHERE username=?);""", (g.user,)).fetchone()
-        flash ("Yay! You just created a room! Go ahead and add scheduling times now!") 
-        #return redirect(url_for("showRoom", id=room["room_id"]))
-        return redirect(url_for("user_house"))
+        flash ("Room successfully created! Add scheduling times below!") 
+        return redirect(url_for("room", id=rooms["room_id"]))
     else:
-        db = get_db()
         rooms = db.execute("""SELECT * FROM rooms WHERE username=?;""", (g.user,)).fetchall()
-    return render_template("user_house.html", form=form, title="Home", rooms=rooms)
+    return render_template("house.html", form=form, title="Home", rooms=rooms, now=now)
 
-# Room page
-@app.route("/show_room/<int:id>")
-@login_required
-def show_room(id):
+# Edit Room page
+@app.route("/edit_room/<int:id>", methods=["GET", "POST"])
+def edit_room(id):
+    form = RoomForm()
+    room = None
     db = get_db()
-    room = db.execute("""SELECT * FROM rooms WHERE username=? AND room_id=?;""", (g.user,id)).fetchone()
-    return render_template("show_room.html", title="Room", room=room)
+    if form.validate_on_submit():
+        automation = form.automation.data
+        name = form.name.data
+        
+        db.execute("""UPDATE rooms SET name=?, automation=? WHERE room_id=?;""", (name, automation, id))
+        db.commit()
+        
+        flash ("Room successfully updated!") 
+        return redirect(url_for("room", id=id))
+    else:
+        room = db.execute("""SELECT * FROM rooms WHERE username=? AND room_id=?;""", (g.user, id)).fetchone()
+    return render_template("edit_room.html", form=form, title="Edit Room", room=room, now=now)
 
 # Deletes Room
 @app.route("/delete_room/<int:id>")
@@ -179,9 +190,63 @@ def delete_room(id):
     db.execute("""DELETE FROM rooms WHERE username =? AND room_id=?;""", (g.user,id)).fetchone()
     db.commit()
     flash ("Room deleted!")
-    return redirect(url_for("user_house"))
+    return redirect(url_for("house"))
 
-#@app.route("/newRoom", methods=["GET", "POST"])
+# Room Page
+@app.route("/room/<int:id>", methods=["GET", "POST"])
+@login_required
+def room(id):
+    form = ScheduleForm()
+    schedule = None
+    db = get_db()
+    room_id = id
+    room = None
+    if form.validate_on_submit():
+        desiredTemp = form.desiredTemp.data
+        startTime = form.startTime.data
+        endTime = form.endTime.data
+        
+        db.execute("""INSERT INTO schedules (username, room_id, desired_temp, start_time, end_time)
+                        VALUES (?,?,?,?,?);""", (g.user, room_id, desiredTemp, startTime, endTime))
+        db.commit()
+        flash ("Schedule successfully added!")
+        return redirect(url_for("room", id=room_id))
+    else:
+        schedule = db.execute("""SELECT * FROM schedules WHERE username=? and room_id=?;""", (g.user, room_id,)).fetchall()
+        room = db.execute("""SELECT * FROM rooms WHERE username=? and room_id=?;""", (g.user, room_id,)).fetchone()
+    return render_template("room.html", title="Room", schedule=schedule, form=form, room=room, now=now)
+
+# Edit Schedule page
+@app.route("/edit_schedule/<int:id>", methods=["GET", "POST"])
+def edit_schedule(id):
+    form = ScheduleForm()
+    db = get_db()
+    schedule = None
+    if form.validate_on_submit():
+        desiredTemp = form.desiredTemp.data
+        startTime = form.startTime.data
+        endTime = form.endTime.data
+        
+        db.execute("""UPDATE schedules SET desired_temp=?, start_time=?, end_time=? WHERE schedule_id=?;""", (desiredTemp, startTime, endTime, id))
+        db.commit()
+
+        schedule = db.execute("""SELECT * FROM schedules WHERE username=? AND schedule_id=?;""", (g.user, id)).fetchone()
+        flash ("Schedule successfully updated!") 
+        return redirect(url_for("room", id=schedule['room_id']))
+    else:
+        schedule = db.execute("""SELECT * FROM schedules WHERE username=? AND schedule_id=?;""", (g.user, id)).fetchone()
+    return render_template("edit_schedule.html", form=form, title="Edit Schedule", schedule=schedule, now=now)
+
+# Deletes Schedule
+@app.route("/delete_schedule/<int:id>")
+@login_required
+def delete_schedule(id):
+    db = get_db()
+    room_id =  db.execute("""SELECT room_id FROM schedules WHERE username =? AND schedule_id=?;""", (g.user,id)).fetchone()
+    db.execute("""DELETE FROM schedules WHERE username =? AND schedule_id=?;""", (g.user,id)).fetchone()
+    db.commit()
+    flash ("Schedule deleted!")
+    return redirect(url_for("room", id=int(room_id)))
 
 if __name__ == '__main__':
     app.run(debug = True)

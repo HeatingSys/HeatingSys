@@ -2,5 +2,24 @@
 
 {% block main_content %}
     <h1>Edit Room</h1>
+    <p> Current time: {{ now }} </p>
+    <div> <a href="{{ url_for('house') }}"> Go back </a> </div>
+    <form action="" method="post" novalidate> 
+        {{ form.hidden_tag() }}
+    
+        {{ form.name.label }}
+        {{ form.name(value=room['name'], class="text") }}
+        {% for error in form.name.errors %}
+            {{ error }}
+        {% endfor %}
+        <br>
+        {{ form.automation.label }}
+        {{ form.automation(value=room['automation'],) }}
+        {% for error in form.automation.errors %}
+            {{ error }}
+        {% endfor %}
+        <br>
+        {{ form.submit(class="submit") }}
+    </form>
     
 {% endblock %}

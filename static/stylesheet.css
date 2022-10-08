@@ -26,16 +26,18 @@ nav a {
 }
 
 a {
-    color: #f562a2;
+    color: #890f79;
 }
 
 a:link { 
     text-decoration: none; 
 }
 
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
 body {
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 1.1rem;
+    background: linear-gradient(to right, #FAAFBA, #f778ba);
     color: black;
     width: 85%;
     margin: 4em auto;
@@ -73,7 +75,7 @@ p {
         color: #f796c0;
     }    
     tr ~ tr:hover{
-        background-color: #8fd1f0
+        background-color: #ae8ff0
     }
 }
 
@@ -96,4 +98,30 @@ img {
     background-color: pink;
     font-size: 1.3rem;
     padding: 1% 2% 1% 2%;
+}
+
+table{
+    width:100%;
+    table-layout: fixed;
+}
+
+th{
+padding: 20px 15px;
+text-align: left;
+font-weight: 1000;
+color: #fff;
+text-transform: uppercase;
+}
+
+td{
+padding: 15px;
+text-align: left;
+vertical-align:middle;
+font-weight: 300;
+color: #fff;
+border-bottom: solid 1px rgba(255,255,255,0.1);
+}
+
+section{
+margin: 50px;
 }

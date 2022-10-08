@@ -2,6 +2,7 @@
 
 {% block main_content %}
     <h1> Bruv yo house </h1>
+    <p> Current time: {{ now }} </p>
     <form action="" method="post" novalidate> 
         {{ form.hidden_tag() }}
     
@@ -32,9 +33,8 @@
 
     {% if rooms %}
     <table>
-        <caption> My room </caption>
         <tr>
-            <th> Name </th>
+            <th> Rooms </th>
             <th> Automation Tool </th>
             <th> </th>
             <th> </th>
@@ -44,7 +44,8 @@
         <tr> 
             <td> {{ entry["name"] }} </td>
             <td> {{ entry["automation"] }} </td>
-            <td> <a href="{{ url_for('show_room', id=entry['room_id']) }}"> Room Details </a> </td> 
+            <td> <a href="{{ url_for('room', id=entry['room_id']) }}"> Room Details </a> </td>
+            <td> <a href="{{ url_for('edit_room', id=entry['room_id']) }}"> Edit </a> </td> 
             <td> <a href="{{ url_for('delete_room', id=entry['room_id']) }}"> Delete </a> </td>
         </tr>
         {% endfor %}
