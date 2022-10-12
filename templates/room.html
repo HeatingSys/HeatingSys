@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+    <h1> {{ room["name"] }} </h1>
+    <p> Current time: {{ now }} </p>
+    <div> <a href="{{ url_for('house') }}"> Go back </a> </div>
+
+    <div class="flash">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p> {{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <form action="" method="post" novalidate> 
+        {{ form.hidden_tag() }}
+        {{ form.desiredTemp.label }}
+        {{ form.desiredTemp() }}
+        {% for error in form.desiredTemp.errors %}
+            {{ error }}
+        {% endfor %}
+        <br>
+        {{ form.startTime.label }}
+        {{ form.startTime(type="time") }}
+        {% for error in form.startTime.errors %}
+            {{ error }}
+        {% endfor %}
+        <br>
+        {{ form.endTime.label }}
+        {{ form.endTime(type="time") }}
+        {% for error in form.endTime.errors %}
+            {{ error }}
+        {% endfor %}
+        <br>
+        {{ form.submit(class="submit") }}
+    </form>
+
+    {% if schedule %}
+    <table>
+        <caption> Schedules </caption>
+        <tr>
+            <th> Desired Temperature </th>
+            <th> Start Time </th>
+            <th> End Time </th>
+            <th> </th>
+            <th> </th>
+        </tr>
+
+        {% for entry in schedule %}
+        <tr> 
+            <td> {{ entry["desired_temp"] }} </td>
+            <td> {{ entry["start_time"] }} </td>
+            <td> {{ entry["end_time"] }} </td>
+            <td> <a href="{{ url_for('edit_schedule', id=entry['schedule_id']) }}"> Edit </a> </td> 
+            <td> <a href="{{ url_for('delete_schedule', id=entry['schedule_id']) }}"> Delete </a> </td>
+        </tr>
+        {% endfor %}
+
+        {% else %}
+        <p> Default settings will be applied to your heating system as you have not added any schedules </p> 
+        {% endif %}
+    </table>  
+    
+{% endblock %}

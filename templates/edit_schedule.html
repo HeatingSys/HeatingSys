@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+    <h1>Edit Schedule</h1>
+    <p> Current time: {{ now }} </p>
+    <div> <a href="{{ url_for('room', id=schedule['room_id']) }}"> Go back </a> </div>
+
+    <form action="" method="post" novalidate> 
+        {{ form.hidden_tag() }}
+        {{ form.desiredTemp.label }}
+        {{ form.desiredTemp(value=schedule['desired_temp']) }}
+        {% for error in form.desiredTemp.errors %}
+            {{ error }}
+        {% endfor %}
+        <br>
+        {{ form.startTime.label }}
+        {{ form.startTime(value=schedule['start_time'], type="time") }}
+        {% for error in form.startTime.errors %}
+            {{ error }}
+        {% endfor %}
+        <br>
+        {{ form.endTime.label }}
+        {{ form.endTime(value=schedule['end_time'],type="time") }}
+        {% for error in form.endTime.errors %}
+            {{ error }}
+        {% endfor %}
+        <br>
+        {{ form.submit(class="submit") }}
+    </form>
+    
+{% endblock %}
