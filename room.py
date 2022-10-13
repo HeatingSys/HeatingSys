@@ -1,18 +1,20 @@
 # Basic structure of room for now
 #import schedule
 import time
-
-
+from schedule import Schedule
 class Room:
     def __init__(self, temp1):
         self.temp = temp1
         self.greenStatus = False #Is this what was previously our 'automated'?
         self.desiredTemp = None #should start out empty
         self.currentTemp = 12 # we need to get our heater/thermostat class before being able to define this properly
-        self.desiredGreenTemp = 10    # online it says eco heating is between 7 and 19C -- QUESTION: What is it and can it be moved to house
-        self.greenStatus = False        #QUESTION -- the same question as ^
-        self.schedule = {}
-        self.scheduleOn = False #this should allow us to turn off the schedule manually based on user 
+        self.schedule = Schedule()
+
+
+        #self.desiredGreenTemp = 10    # online it says eco heating is between 7 and 19C -- QUESTION: What is it and can it be moved to house
+        #self.greenStatus = False        #QUESTION -- the same question as ^
+        #self.schedule = {}
+        #self.scheduleOn = False #this should allow us to turn off the schedule manually based on user 
         #self.heater = Heater object #gonna comment this out until we have our thermostat class
         """
 
@@ -26,7 +28,6 @@ class Room:
     # checks current temperature and calls heater method to turn on or off heater"""
     def check_temp(self):
         print(self.temp)  # tester
-        
         if self.greenStatus == False:
             if self.currentTemp < self.desiredTemp:
                 self.heater.turnOn(currentTemp, desiredTemp) # defined in heater class
@@ -48,42 +49,55 @@ class Room:
         self.check_temp
         
 
+    #QUESTION is this turning off temp??
+    #Or is it like energy saving mode of heating on
     def turn_off_low_heating(self):
+        #If we are having a situation where outside temp affects inside temp we need to 'degrade' temp here
+
         print("regular heating on")  # tester
        
         self.greenStatus = False
         self.check_temp
+
+    def turnOffScheduling(self):
+        print('hi')
 
 
     # method specifies when to kick in scheduled heating
     # leng is length of interval in seconds
     # times is how many times the loop repeats
     def scheduling(self, leng, times):
+        if self.scheduleOn is True: #if schedule is on
+            #check to see if there's a schedule to be on now
+            currentTime = '12:00' #- automate??
+            #check here to see if 
+            
+
+
         schedule.every(leng).seconds.do(self.check_temp) # every _ second check current temperature & adjust heater
         schedule.every().day.at("11:47").do(self.turn_on_low_heating()) # time to switch to green  heating
         schedule.every().day.at("11:47:10").do(self.turn_off_low_heating()) # time to switch to regular heating
         for i in range(times + 1):
             schedule.run_pending()
             time.sleep(1)  # exits the scheduling method once range is reached
+    
 
-    # method specifies when to kick in scheduled heating
-    def setUpSchedule(self,startTime,info):
-        self.schedule[startTime] = info
+    #IDK if anyone else has any thoughts on this but in theory the way I'm thinking of things is this should run constantly and
+    # it should be interupted then by other methods being called
+    #this should find the next schedule to implement - basically the next time we need to care about 
+    def checkSchedule(self):
+        #find next most recent schdule
+        now = '12:00' #should be current time 
+        timeInt = int(now[0] + now[1])
+        nextTime = None
+        for schedule in self.schedule:
+            scheduleTime = int(schedule[0] +schedule[1])
+            if schedule 
 
-    #from user persepective the user will initally try setup schedule and setUpSchedule should be called from inside here
-    # So from the website perspective a user submits a form with startime , temp and endtime of the schedule and this method is called
-    # regardless of whether self.schedule is empty yet or nah 
-    def addToSchedule(self,startTime,temp,endTime): #could have an override true or false that could be an optional input 
-        scheduleList = [temp,endTime]
-        if len(self.schedule) ==0:
-            return self.setUpSchedule(startTime,scheduleList)#do we even need a separate method for this ?? - it's better in theory but stupid in practice
-        else:
-            #the time should be a string
-            if startTime in self.schedule:
-                #clash, for now we'll override this automatically - discuss how to proceed with this
-                self.schedule[startTime] = scheduleList
-            else:
-                self.schedule[startTime] = scheduleList
+
+    
+
+
 
 room1 = Room(23)
 room1.addToSchedule('10:00',20,'12:00')

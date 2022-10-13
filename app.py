@@ -7,7 +7,6 @@ from datetime import datetime
 from functools import wraps
 from random import sample
 from itertools import * 
-from test import *
 
 # BEST VIEWED ON PC/LAPTOP
 
