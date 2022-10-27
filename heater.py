@@ -1,18 +1,3 @@
-<<<<<<< HEAD
-#should be one of these in each room - in theory
-#I think some of the maths stuff should work in here
-class thermostat:
-    def __init__(self):
-        #hopefully shouldn't really need much here in theory
-        self.heaterState = False #should be on or off where True =on and False = Off 
-        self.currentTemp = 0 #most recent reading
-        print('hi')
-
-    def turnOnHeater(self):
-        print('turn on heater')
-
-    #Need method here to like mimic the increase in room temp 
-=======
 # should be one of these in each room - in theory
 # i think this is where the window sensor should go
 
@@ -160,4 +145,3 @@ heater.temperatureSimulator(29, 30, 22, 26, 27)
 print(heater.currentTemp)
 heater.powerCalculator(21,17,1000)
 print(heater.currentEnergy)
->>>>>>> 9457a17b7bae442c56e93bea513313a20a539043
