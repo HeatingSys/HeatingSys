@@ -1,5 +1,5 @@
 # Basic structure of room for now
-#import schedule
+import schedule
 import time
 
 
