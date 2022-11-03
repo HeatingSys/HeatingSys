@@ -3,7 +3,7 @@
 class Schedule:
     def __init__(self) -> None:
         self.schedule = {}
-        self.scheduleOn = False
+        self.scheduleOn = True
 
     
     # method specifies when to kick in scheduled heating

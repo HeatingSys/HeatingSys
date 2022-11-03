@@ -1,4 +1,5 @@
 #hardcode default
+#pass default schdule into room and save it as sep var
 from room import Room
 from schedule import Schedule
 class House:
@@ -6,6 +7,7 @@ class House:
         self.name = name
         self.rooms = []
         self.outsideTemp = 0 #Makes sense logically that this is defined here but programmatically does this make sense?
+        self.defaultSchedule = Schedule()
 
 
     #should add room to house and also should do some of the setup of room - could separate this into  another method but I kinda don't think it's necessary   
@@ -17,17 +19,12 @@ class House:
         for room in self.rooms:
             if roomName == room.name:
                 return "Room already exists"
-        roomToAdd = Room(roomName)
+        roomToAdd = Room(12,roomName)
         self.rooms.append(roomToAdd)
-        roomToAdd.house = self #I don't know if this is syntatically correct ?
-        roomToAdd.schedule = self.schedule #should automatically give room the default 
-        roomToAdd.nextSchedule()
+        #roomToAdd.house = self #I don't know if this is syntatically correct ? so this does shockingly work but we've decided to scrap it
+        roomToAdd.defaultSchedule = self.defaultSchedule #should automatically give room the default 
+        roomToAdd.checkSchedule()
         
-    
-    def addDefaultSchedule(self):
-        self.schedule = Schedule()
-        #from here we need to check 
-        #should this be hardcoded or should we get from the user ? ]
     
     def addToDefault(self, startTime,desiredTemp, endTime):
         self.schedule.addToSchedule(startTime,desiredTemp, endTime)
@@ -44,3 +41,11 @@ class House:
             schedule.run_pending()
             time.sleep(1)  # exits the scheduling method once range is reached
     """
+
+myHouse = House('myhouse')
+myHouse.defaultSchedule.addToSchedule('08:00',20,'12:00')
+myHouse.defaultSchedule.addToSchedule('14:00',20,'12:00')
+myHouse.defaultSchedule.addToSchedule('17:00',20,'12:00')
+myHouse.defaultSchedule.addToSchedule('23:00',20,'12:00')
+myHouse.addNewRoom('bathroom')
+
