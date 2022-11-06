@@ -7,20 +7,11 @@
     </head>
 
     <nav>
-        {% if g.user %}
         <a href="{{ ( url_for('house') ) }}"> Home </a>
-        <a href="{{ ( url_for('profile') ) }}"> My Profile </a>
-        <a href="{{ ( url_for('house') ) }}"> My House </a>
-        <a href="{{ ( url_for('settings') ) }}"> Settings </a>
-        <a href="{{ ( url_for('logout') ) }}"> Logout </a>
-        {% else %}
-        <a href="{{ ( url_for('index') ) }}"> Home </a>
         <a href="{{ ( url_for('about') ) }}"> About </a>
         <a href="{{ ( url_for('product') ) }}"> Our Solution </a>
-        <a href="{{ ( url_for('demo') ) }}"> Demo </a>
-        <a href="{{ ( url_for('registration') ) }}"> Register </a>
-        <a href="{{ ( url_for('login') ) }}"> Login </a>
-        {% endif %}
+        <a href="{{ ( url_for('house') ) }}"> My House </a>
+        <a href="{{ ( url_for('settings') ) }}"> Settings </a>
     </nav>
 
     <body>
