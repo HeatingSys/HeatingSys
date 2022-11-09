@@ -1,12 +1,16 @@
-#hardcode default
-#pass default schdule into room and save it as sep var
+# hardcode default
+# pass default schedule into room and save it as sep var
+
 from room import Room
 from schedule import Schedule
+from outsideTemp import OutsideTemp
+
+
 class House:
     def __init__(self,name):
         self.name = name
         self.rooms = []
-        self.outsideTemp = 0 #Makes sense logically that this is defined here but programmatically does this make sense?
+        self.outsideTemp = OutsideTemp()
         self.defaultSchedule = Schedule()
 
 
@@ -19,15 +23,14 @@ class House:
         for room in self.rooms:
             if roomName == room.name:
                 return "Room already exists"
-        roomToAdd = Room(12,roomName)
+        roomToAdd = Room(roomName)
         self.rooms.append(roomToAdd)
         #roomToAdd.house = self #I don't know if this is syntatically correct ? so this does shockingly work but we've decided to scrap it
         roomToAdd.defaultSchedule = self.defaultSchedule #should automatically give room the default 
         roomToAdd.checkSchedule()
-        
-    
-    def addToDefault(self, startTime,desiredTemp, endTime):
-        self.schedule.addToSchedule(startTime,desiredTemp, endTime)
+
+    def addToDefault(self, startTime, desiredTemp, endTime):
+        self.schedule.addToSchedule(startTime, desiredTemp, endTime)
     
 
     """
