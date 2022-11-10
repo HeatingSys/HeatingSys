@@ -1,6 +1,6 @@
-# Basic structure of room for history 3 
-#import schedule
-#**Need to add more checks for whether schduele exists throughout the code 
+# Basic structure of room for now
+import schedule
+import time
 
 from heater import thermostat
 from schedule import Schedule
