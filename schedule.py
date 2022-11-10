@@ -18,7 +18,10 @@ class Schedule:
         scheduleList = [temp,endTime]
         if len(self.schedule) ==0:
             return self.setUpSchedule(startTime,scheduleList)#do we even need a separate method for this ?? - it's better in theory but stupid in practice
-        else:
+        else:#gonna add validation here 
+            result = self.validateAdd()
+            if result is False:
+                return
             #the time should be a string
             if startTime in self.schedule:
                 #clash, for now we'll override this automatically
@@ -34,3 +37,19 @@ class Schedule:
             if key == todelete:
                 del self.schedule[key]
                 return
+    
+    #require 1 hour diff between schedules
+    def validateAdd(self,newTime):
+        newTimeHour = int(newTime[0] +newTime[1])
+        for time in self.schedule:
+            timeInHour = int(time[0] +time[1])
+            diff = newTimeHour - timeInHour
+            if diff <0:
+                diff = diff *-1
+            if diff <2:
+                #don't allow
+                print("Bitch not allowed")
+                return False
+
+
+

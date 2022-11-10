@@ -8,6 +8,9 @@ class House:
         self.rooms = []
         self.outsideTemp = 0 #Makes sense logically that this is defined here but programmatically does this make sense?
         self.defaultSchedule = Schedule()
+        myHouse.defaultSchedule.addToSchedule('08:00',20,'12:00')
+        myHouse.defaultSchedule.addToSchedule('14:00',20,'16:00')
+        myHouse.defaultSchedule.addToSchedule('17:00',20,'19:00')
 
 
     #should add room to house and also should do some of the setup of room - could separate this into  another method but I kinda don't think it's necessary   
@@ -28,7 +31,10 @@ class House:
     
     def addToDefault(self, startTime,desiredTemp, endTime):
         self.schedule.addToSchedule(startTime,desiredTemp, endTime)
-    
+        #if rooms exist add updated schedule to default same for delete
+
+    def checkOutsideTempPeriodically(self):
+        print('hello')
 
     """
     Leaving this here for now - will be handy when running our code fully
