@@ -108,6 +108,7 @@ class Thermostat:
                     self.insideTempHistory[0] = currentOutsideTemp
                 # if heater has been off for a while and window is closed
                 else:
+                    
                     self.insideTempHistory[0] = currentOutsideTemp + 3
 
             # if heater has been recently turned off, then temp will be exponentially going down
