@@ -1,6 +1,3 @@
-# hardcode default
-# pass default schedule into room and save it as sep var
-
 from room import Room
 from schedule import Schedule
 from outsideTemp import OutsideTemp
@@ -12,25 +9,34 @@ class House:
         self.rooms = []
         self.outsideTemp = OutsideTemp()
         self.defaultSchedule = Schedule()
+        self.heatingPower =12
+        self.defaultSchedule.addToSchedule('08:00',20,'12:00')
+        self.defaultSchedule.addToSchedule('14:00',20,'16:00')
+        self.defaultSchedule.addToSchedule('17:00',20,'19:00')
 
 
-    #should add room to house and also should do some of the setup of room - could separate this into  another method but I kinda don't think it's necessary   
+    #should add room to house and also should do some of the setup of room
     def addNewRoom(self, roomName):
-        #Should we add rooms without any validation?
-        #i.e is it possible to have emma's room and emma room or even just emma's room and emma's room
-        #for now I'm assuming there's none of this validation
-        #currently this validation check is very weak and very very basic
         for room in self.rooms:
             if roomName == room.name:
                 return "Room already exists"
-        roomToAdd = Room(roomName)
+        roomToAdd = Room(roomName,self.outsideTemp)#pass the object outside temp into 
         self.rooms.append(roomToAdd)
-        #roomToAdd.house = self #I don't know if this is syntatically correct ? so this does shockingly work but we've decided to scrap it
         roomToAdd.defaultSchedule = self.defaultSchedule #should automatically give room the default 
-        roomToAdd.checkSchedule()
+        roomToAdd.checkNextSchedule()
+        roomToAdd.outsideTemp = self.outsideTemp
+        roomToAdd.heatingPower = self.heatingPower
 
+
+    #add to default schedule
     def addToDefault(self, startTime, desiredTemp, endTime):
         self.schedule.addToSchedule(startTime, desiredTemp, endTime)
+
+    #call outside temp class 
+    def checkOutsideTempPeriodically(self):
+        self.outsideTemp.setCurrentOutsideTemp()
+
+
     
 
     """
