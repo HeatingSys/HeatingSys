@@ -89,14 +89,6 @@ class Room:
             #call to function to start the schdule
             self.scheduling()
 
-#manually change temp
-    def turnOffSchedule(self):
-        self.roomSchedule.scheduleOn = False
-
-    def turnOnSchedule(self):
-        self.roomSchedule.scheduleOn = True
-    
-    #get rid of ?
 
     def changeTempDirectly(self,desiredTemp, prevOutsideTemp,currentOutside):
         self.thermomstat.turnOnHeater(desiredTemp,prevOutsideTemp,currentOutside ) # will call one of the temp functions here instead
@@ -105,13 +97,15 @@ class Room:
         #want to delete the default but don't want to delete anything added by user 
         #should probably have a check to see if theres 1) a house schedule 2) a room schedule 
         if self.defaultSchedule and self.roomSchedule:
-            for time in self.defaultSchedule():
-                if time in self.roomSchedule and self.defaultSchedule[time] == self.roomSchedule[time]:
+            for time in self.defaultSchedule.schedule.keys():
+                if time in self.roomSchedule.schedule and self.defaultSchedule.schedule[time] == self.roomSchedule.schedule[time]:
                     del self.roomSchedule.schedule[time]
     
     def deleteEntireSchdule(self):
         self.roomSchedule = None
         self.roomSchedule = Schedule()
+    def addToSchedule(self,startTime,desiredTemp, endTime):
+        self.roomSchedule.addToSchedule(startTime,desiredTemp,endTime)
 
 
 '''

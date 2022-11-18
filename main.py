@@ -12,6 +12,13 @@ def main():
     #this can run every 30 mins 
     myHouse.checkOutsideTempPeriodically()
     for room in myHouse.rooms:
+        room.turnOffScheduling()
+        room.scheduling()
+        room.turnOnScheduling()
+        room.deleteDefaultSchedule()
+        room.addToSchedule('13:00',17,'15:00')
+        room.addDefaultToExistingSchedule()
+        room.checkNextSchedule()
         now = datetime.now().strftime("%H:%M")
         current = int(now[3] + now[4])
         if current >30:
@@ -25,7 +32,7 @@ def main():
                 #call scheduling 
                 room.scheduling()
         
-    room.checkTempPeriodically(myHouse.outsideTemp.getPreviousOutsideTemp,myHouse.outsideTemp.getCurrentOutsideTemp(),room.heatingPower)#what is our desired temp if no schedule 
+        room.checkTempPeriodically(myHouse.outsideTemp.getPreviousOutsideTemp,myHouse.outsideTemp.getCurrentOutsideTemp(),room.heatingPower)#what is our desired temp if no schedule 
     #myHouse.calculateMonthlyEnergy()
     time.sleep(10)#wait 30 mins
 
