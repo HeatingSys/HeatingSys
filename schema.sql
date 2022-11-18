@@ -15,5 +15,7 @@ CREATE TABLE schedules
     room_id INTEGER NOT NULL,
     desired_temp INTEGER,
     start_time TIME (0),
-    end_time TIME (0)
+    end_time TIME (0),
+    next_schedule TIME (0),
+    schedule_state BOOLEAN
 );

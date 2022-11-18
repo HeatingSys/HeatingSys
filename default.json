@@ -1,0 +1,22 @@
+[
+    {
+        "schedule_id": 1,
+        "desired_temp": 10,
+        "start_time": "08:00",
+        "end_time": "08:30"
+    },
+
+    {
+        "schedule_id": 2,
+        "desired_temp": 15,
+        "start_time": "09:00",
+        "end_time": "09:30"
+    },
+
+    {
+        "schedule_id": 3,
+        "desired_temp": 18,
+        "start_time": "10:00",
+        "end_time": "10:30"
+    }
+]

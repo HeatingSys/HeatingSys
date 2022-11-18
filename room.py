@@ -73,7 +73,6 @@ class Room:
                 if self.roomSchedule is None or time not in self.roomSchedule.schedule:
                     self.addDefaultToExistingSchedule()
         nextTime = int(self.nextSchedule[0] + self.nextSchedule[1])
-
         timeInt = int(self.currentTime[0] +self.currentTime[1])
         timeDif =nextTime - timeInt
         if timeDif <0:

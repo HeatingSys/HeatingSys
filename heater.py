@@ -28,6 +28,9 @@ class Thermostat:
     def getCurrentTemp(self):
         return self.insideTempHistory[0]
 
+    def getHeaterState(self):
+        return self.heaterState
+
     # Room class will call either turnOnHeater or turnOffHeater every 30 minutes
     def heaterOn(self, desiredTemp, previousOutsideTemp, currentOutsideTemp, heaterPower):
         # if currentTemp > desiredTemp, heater should not go on

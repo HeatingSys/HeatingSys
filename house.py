@@ -16,9 +16,9 @@ class House:
         self.energyHoursGuage = 0 # how much longer (in hrs) heating be kept on based on current heater settings
         self.pastMonthStats = [None] * 12 # record of the last 12 months of stats
         self.lastMonthStatsPointer = -1 # points to the last month's stats 
-        self.defaultSchedule.addToSchedule('08:00',20,'12:00') #
-        self.defaultSchedule.addToSchedule('14:00',20,'16:00') #
-        self.defaultSchedule.addToSchedule('17:00',20,'19:00') #
+        #self.defaultSchedule.addToSchedule('08:00',20,'12:00') #
+        #self.defaultSchedule.addToSchedule('14:00',20,'16:00') #
+        #self.defaultSchedule.addToSchedule('17:00',20,'19:00') #
 
 
     # called when user sets up monthly stats settings (user requirements ID 9-11)
@@ -81,6 +81,8 @@ class House:
         self.outsideTemp.setCurrentOutsideTemp()
 
 
+    def getAllRooms():
+        return self.rooms
     
 
     """

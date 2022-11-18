@@ -2,11 +2,19 @@ from flask import Flask, render_template, redirect, url_for, session, g, flash, 
 from forms import RoomForm, ScheduleForm
 from database import get_db, close_db
 from flask_session import Session
-from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from functools import wraps
 from random import sample
 from itertools import * 
+
+from outsideTemp import OutsideTemp
+from heater import Thermostat
+
+outside = OutsideTemp()
+
+outside = OutsideTemp()
+o = outside.getCurrentOutsideTemp()
+inside = Thermostat(o)
 
 # BEST VIEWED ON PC/LAPTOP
 
@@ -84,7 +92,8 @@ def house():
         return redirect(url_for("room", id=rooms["room_id"]))
     else:
         rooms = db.execute("""SELECT * FROM rooms;""").fetchall()
-    return render_template("house.html", form=form, title="Home", rooms=rooms, now=now)
+        external_temp = outside.getCurrentOutsideTemp()
+    return render_template("house.html", form=form, title="Home", rooms=rooms, external_temp=external_temp, now=now)
 
 # Edit Room page
 @app.route("/edit_room/<int:id>", methods=["GET", "POST"])
@@ -135,7 +144,9 @@ def room(id):
     else:
         schedule = db.execute("""SELECT * FROM schedules WHERE room_id=?;""", (room_id,)).fetchall()
         room = db.execute("""SELECT * FROM rooms WHERE room_id=?;""", (room_id,)).fetchone()
-    return render_template("room.html", title="Room", schedule=schedule, form=form, room=room, now=now)
+        heater_state = str(inside.getHeaterState())
+        current_temp = str(inside.getCurrentTemp())
+    return render_template("room.html", title="Room", schedule=schedule, form=form, room=room, heater_state=heater_state, current_temp=current_temp, now=now)
 
 # Edit Schedule page
 @app.route("/edit_schedule/<int:id>", methods=["GET", "POST"])
@@ -167,6 +178,16 @@ def delete_schedule(id):
     db.commit()
     flash ("Schedule deleted!")
     return redirect(url_for("room", id=int(room_id)))
+
+# Default Schedule Page
+import json
+
+@app.route("/defaultSchedule", methods=["GET"])
+def defaultSchedule():
+    f = open('default.json')
+    data = json.load(f)
+    return render_template("defaultSchedule.html", title="Default Schedule", data=data)
+
 
 if __name__ == '__main__':
     app.run(debug = True)

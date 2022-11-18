@@ -1,0 +1,8 @@
+{
+    "schedule_id": 1,
+    "room_id": 2,
+    "desired_temp": 8.6,
+    "start_time": "9976770500",
+    "end_time": 8.6,
+    "schedule_state": false
+}

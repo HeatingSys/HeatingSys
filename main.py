@@ -5,6 +5,7 @@ from datetime import datetime
 
 
 def main():
+    
     pass
     # the House interface goes here
     myHouse = House('24 bothar nua')
@@ -27,7 +28,7 @@ def main():
         
     room.checkTempPeriodically(myHouse.outsideTemp.getPreviousOutsideTemp,myHouse.outsideTemp.getCurrentOutsideTemp(),room.heatingPower)#what is our desired temp if no schedule 
     #myHouse.calculateMonthlyEnergy()
-    time.sleep(10)#wait 30 mins
+    time.sleep(0.5) #wait 30 mins
 
 
 

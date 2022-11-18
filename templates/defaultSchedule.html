@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+    <h1> Default Schedule Settings </h1>
+    <p> This page shows the schedule times for the default scheduling </p>
+    <div> <a href="{{ url_for('house') }}"> Go back </a> </div>
+
+    <div class="flash">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p> {{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <table>
+        <caption> Schedules </caption>
+        <tr>
+            <th> Desired Temperature </th>
+            <th> Start Time </th>
+            <th> End Time </th>
+            <th> </th>
+            <th> </th>
+        </tr>
+
+        {% for entry in data %}
+        <tr> 
+            <td> {{ entry["desired_temp"] }} </td>
+            <td> {{ entry["start_time"] }} </td>
+            <td> {{ entry["end_time"] }} </td>
+        </tr>
+        {% endfor %}
+
+    </table>  
+    
+{% endblock %}
