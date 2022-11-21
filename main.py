@@ -1,3 +1,4 @@
+
 import time
 from room import *
 from house import House
@@ -7,11 +8,29 @@ from datetime import datetime
 def main():
     pass
     # the House interface goes here
-    myHouse = House('24 bothar nua')
-    myHouse.addNewRoom('bathroom')
+    myHouse = House()
+    myHouse.addNewRoom(2)
+    myHouse.addNewRoom(6)
+    myHouse.addNewRoom(7)
+
+    r = myHouse.getRoom(7)
+
+    print(r.room_id)
+
+    #r.addToSchedule('18:00',20,'20:00')
+    r.addToSchedule('21:00',20,'22:00')
+    r.addToSchedule('23:00',20,'00:00')
+
+    print(r.roomSchedule.schedule)
+
+    #roomToAdd.checkNextSchedule()
+
+    print(r.heatingRunning)
+
     #this can run every 30 mins 
     myHouse.checkOutsideTempPeriodically()
     for room in myHouse.rooms:
+        print("in the loop")
         now = datetime.now().strftime("%H:%M")
         current = int(now[3] + now[4])
         if current >30:
@@ -24,21 +43,13 @@ def main():
             if int(room.nextSchedule[3] +room.nextSchedule[4]) >= int(now[3]+now[4]) and int(room.nextSchedule[3] +room.nextSchedule[4]) <=int(outOfRange[0]+outOfRange[1]):
                 #call scheduling 
                 room.scheduling()
+
+        current_temp = r.thermomstat.getCurrentTemp()
+        print(current_temp)
         
-        room.checkTempPeriodically(myHouse.outsideTemp.getPreviousOutsideTemp,myHouse.outsideTemp.getCurrentOutsideTemp(),room.heatingPower)#what is our desired temp if no schedule 
+        room.checkTempPeriodically(myHouse.outsideTemp.getPreviousOutsideTemp,myHouse.outsideTemp.getCurrentOutsideTemp(),room.heaterPower)#what is our desired temp if no schedule 
     #myHouse.calculateMonthlyEnergy()
-    time.sleep(10)#wait 30 mins
+    time.sleep(10)#wait 30 mins'''
 
-
-
-
-
-
-
-
-
-
-i =0
-while i<10:
-    main() 
-    i +=1
+    
+main()

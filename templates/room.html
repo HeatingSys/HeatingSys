@@ -2,7 +2,10 @@
 
 {% block main_content %}
     <h1> {{ room["name"] }} </h1>
-    <p> Current time: {{ now }} </p>
+    <p> Current time: {{ now }} <br>
+        Room temperature: {{ current_temp }} <br>
+        Is heater on? {{ heater_state }}
+    </p>
     <div> <a href="{{ url_for('house') }}"> Go back </a> </div>
 
     <div class="flash">

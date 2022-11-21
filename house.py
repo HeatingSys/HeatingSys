@@ -4,8 +4,7 @@ from outsideTemp import OutsideTemp
 
 
 class House:
-    def __init__(self,name):
-        self.name = name
+    def __init__(self):
         self.rooms = []
         self.outsideTemp = OutsideTemp()
         self.defaultSchedule = Schedule()
@@ -16,9 +15,10 @@ class House:
         self.energyHoursGuage = 0 # how much longer (in hrs) heating be kept on based on current heater settings
         self.pastMonthStats = [None] * 12 # record of the last 12 months of stats
         self.lastMonthStatsPointer = -1 # points to the last month's stats 
-        self.defaultSchedule.addToSchedule('08:00',20,'12:00') #
-        self.defaultSchedule.addToSchedule('14:00',20,'16:00') #
-        self.defaultSchedule.addToSchedule('17:00',20,'19:00') #
+        #self.defaultSchedule.addToSchedule('19:00',20,'20:00') #
+        #self.defaultSchedule.addToSchedule('20:00',25,'21:00') #
+        #self.defaultSchedule.addToSchedule('19:00',20,'20:00')
+        #self.defaultSchedule.addToSchedule('17:00',20,'19:00') #
 
 
     # called when user sets up monthly stats settings (user requirements ID 9-11)
@@ -60,17 +60,12 @@ class House:
         self.energyHoursGuage = 0 # reset guage to zero
 
     #should add room to house and also should do some of the setup of room
-    def addNewRoom(self, roomName):
-        for room in self.rooms:
-            if roomName == room.name:
-                return "Room already exists"
-        roomToAdd = Room(roomName,self.outsideTemp)#pass the object outside temp into 
+    def addNewRoom(self, room_id):
+        roomToAdd = Room(room_id, self.outsideTemp)#pass the object outside temp into 
         self.rooms.append(roomToAdd)
-        roomToAdd.defaultSchedule = self.defaultSchedule #should automatically give room the default 
-        roomToAdd.checkNextSchedule()
+        #roomToAdd.defaultSchedule = self.defaultSchedule #should automatically give room the default 
         roomToAdd.outsideTemp = self.outsideTemp
-        roomToAdd.heatingPower = self.heatingPower
-
+        roomToAdd.heaterPower = self.heaterPower
 
     #add to default schedule
     def addToDefault(self, startTime, desiredTemp, endTime):
@@ -79,6 +74,11 @@ class House:
     #call outside temp class 
     def checkOutsideTempPeriodically(self):
         self.outsideTemp.setCurrentOutsideTemp()
+    
+    def getRoom(self, room_id):
+        for room in self.rooms:
+            if room.room_id == room_id:
+                return room
 
 
     
@@ -95,10 +95,11 @@ class House:
             time.sleep(1)  # exits the scheduling method once range is reached
     """
 
-myHouse = House('myhouse')
+''' myHouse = House()
 myHouse.defaultSchedule.addToSchedule('08:00',20,'12:00')
 myHouse.defaultSchedule.addToSchedule('14:00',20,'12:00')
 myHouse.defaultSchedule.addToSchedule('17:00',20,'12:00')
 myHouse.defaultSchedule.addToSchedule('23:00',20,'12:00')
-myHouse.addNewRoom('bathroom')
-
+myHouse.addNewRoom(1)
+myHouse.addNewRoom(2)
+myHouse.getRoom(1)'''

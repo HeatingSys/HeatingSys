@@ -2,11 +2,18 @@ from flask import Flask, render_template, redirect, url_for, session, g, flash, 
 from forms import RoomForm, ScheduleForm
 from database import get_db, close_db
 from flask_session import Session
-from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+import time
 from functools import wraps
-from random import sample
 from itertools import * 
+from multiprocessing import Process, Value
+
+from room import *
+from house import House
+
+user_house = House()
+now = datetime.now().strftime("%H:%M")
+outdoor_temp = user_house.outsideTemp.getCurrentOutsideTemp()
 
 # BEST VIEWED ON PC/LAPTOP
 
@@ -25,29 +32,11 @@ def close_db_at_end_of_requests(e=None):
 def page_not_found(e):
     return render_template('oh_no.html', title="Error"), 404
 
-now = datetime.now().strftime("%H:%M")
-
 # Home page
 @app.route("/")
 def index():
     db = get_db()
     return render_template("index.html", title="Home", now=now)
-
-# About page
-@app.route("/about")
-def about():
-    return render_template("about.html", title="About")
-
-# Our Solution page
-@app.route("/product")
-def product():
-    db = get_db()
-    return render_template("product.html", title="Our Solution")
-
-# Product Demo page
-@app.route("/demo")
-def demo():
-    return render_template("demo.html", title="Demo")
 
 # Shows terms and conditions
 @app.route("/terms")
@@ -80,11 +69,15 @@ def house():
         
         rooms = db.execute("""SELECT * FROM rooms WHERE room_id in 
                                 (SELECT max(room_id) FROM rooms);""").fetchone()
-        flash ("Room successfully created! Add scheduling times below!") 
+        
+        user_house.addNewRoom(int(rooms["room_id"]))
+        
+        flash ("Room successfully created! Add scheduling times below!")
+
         return redirect(url_for("room", id=rooms["room_id"]))
     else:
         rooms = db.execute("""SELECT * FROM rooms;""").fetchall()
-    return render_template("house.html", form=form, title="Home", rooms=rooms, now=now)
+    return render_template("house.html", form=form, title="Home", rooms=rooms, now=now, outdoor_temp=outdoor_temp)
 
 # Edit Room page
 @app.route("/edit_room/<int:id>", methods=["GET", "POST"])
@@ -122,6 +115,8 @@ def room(id):
     db = get_db()
     room_id = id
     room = None
+    correctRoomObject = user_house.getRoom(id)
+
     if form.validate_on_submit():
         desiredTemp = form.desiredTemp.data
         startTime = form.startTime.data
@@ -131,11 +126,23 @@ def room(id):
                         VALUES (?,?,?,?);""", (room_id, desiredTemp, startTime, endTime))
         db.commit()
         flash ("Schedule successfully added!")
+
+        correctRoomObject.addToSchedule(str(startTime),int(desiredTemp),str(endTime))
+
         return redirect(url_for("room", id=room_id))
     else:
         schedule = db.execute("""SELECT * FROM schedules WHERE room_id=?;""", (room_id,)).fetchall()
         room = db.execute("""SELECT * FROM rooms WHERE room_id=?;""", (room_id,)).fetchone()
-    return render_template("room.html", title="Room", schedule=schedule, form=form, room=room, now=now)
+        current_temp = str(correctRoomObject.thermomstat.getCurrentTemp())
+
+        #if correctRoomObject.roomSchedule.schedule:
+            #correctRoomObject.scheduling()
+
+        heater_state = "OFF"
+        if correctRoomObject.heatingRunning == True:
+            heater_state = "ON"
+
+    return render_template("room.html", title="Room", schedule=schedule, form=form, room=room, now=now, current_temp=current_temp, outdoor_temp=outdoor_temp,heater_state=heater_state)
 
 # Edit Schedule page
 @app.route("/edit_schedule/<int:id>", methods=["GET", "POST"])
@@ -168,5 +175,31 @@ def delete_schedule(id):
     flash ("Schedule deleted!")
     return redirect(url_for("room", id=int(room_id)))
 
+def main(start):
+    while True:
+      if start.value == True:
+        user_house.checkOutsideTempPeriodically()
+        if user_house.rooms:
+            for room in user_house.rooms:
+                current = int(now[3] + now[4])
+                if current > 1:
+                    diff = current - 1
+                    outOfRange = str(int(now[0] + now[1])+1) +':' +str(diff)
+                else:
+                    outOfRange = now[0]+now[1]+':' +str(current + 1)
+                val1 =int(outOfRange[0]+outOfRange[1])
+                if int(room.nextSchedule[0] +room.nextSchedule[1]) >= int(now[0]+now[1]) and int(room.nextSchedule[0] +room.nextSchedule[1]) <=int(outOfRange[0]+outOfRange[1]):
+                    if int(room.nextSchedule[3] +room.nextSchedule[4]) >= int(now[3]+now[4]) and int(room.nextSchedule[3] +room.nextSchedule[4]) <=int(outOfRange[0]+outOfRange[1]):
+                        print("before")
+                        room.scheduling()
+                        print("after")
+                
+                room.checkTempPeriodically(user_house.outsideTemp.getPreviousOutsideTemp(), user_house.outsideTemp.getCurrentOutsideTemp(), room.heaterPower)
+        time.sleep(10)
+
 if __name__ == '__main__':
-    app.run(debug = True)
+    running = Value('b', True)
+    p = Process(target=main, args=(running,))
+    p.start()  
+    app.run(debug=True)
+    p.join()
