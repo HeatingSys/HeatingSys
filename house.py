@@ -24,8 +24,8 @@ class House:
         self.rooms.append(roomToAdd)
         roomToAdd.defaultSchedule = self.defaultSchedule #should automatically give room the default 
         roomToAdd.checkNextSchedule()
-        roomToAdd.outsideTemp = self.outsideTemp
         roomToAdd.heatingPower = self.heatingPower
+        print("New room ",roomName,' added')
 
 
     #add to default schedule
@@ -50,11 +50,11 @@ class House:
             schedule.run_pending()
             time.sleep(1)  # exits the scheduling method once range is reached
     """
-
+"""
 myHouse = House('myhouse')
 myHouse.defaultSchedule.addToSchedule('08:00',20,'12:00')
 myHouse.defaultSchedule.addToSchedule('14:00',20,'12:00')
 myHouse.defaultSchedule.addToSchedule('17:00',20,'12:00')
 myHouse.defaultSchedule.addToSchedule('23:00',20,'12:00')
 myHouse.addNewRoom('bathroom')
-
+"""

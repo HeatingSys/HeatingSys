@@ -49,7 +49,7 @@ class Room:
             #delete if - is there more?
             #so either we call erins temperatureSimulator here or else we call turn on heater now and from heater turn on the temperature simulator for now I'll do it here
             self.heatingRunning  = True
-            self.thermomstat.heaterOn(info[0],self.outsideTemp.getPreviousOutsideTemp,self.outsideTemp.getCurrentOutsideTemp)
+            self.thermomstat.heaterOn(info[0],self.outsideTemp.getPreviousOutsideTemp,self.outsideTemp.getCurrentOutsideTemp,self.heatingPower)
         
     #check every 30 mins for erins temp
     #this is called from house so no need for outside temp in roo, can pass vars in from house
@@ -106,6 +106,10 @@ class Room:
         self.roomSchedule = Schedule()
     def addToSchedule(self,startTime,desiredTemp, endTime):
         self.roomSchedule.addToSchedule(startTime,desiredTemp,endTime)
+
+    def getCurrentTemp(self):
+        self.currentTemp = self.thermomstat.getCurrentTemp()
+        print("Current room Temp: ",self.currentTemp)
 
 
 '''
