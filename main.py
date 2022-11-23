@@ -26,9 +26,9 @@ def main():
                     #call scheduling 
                     room.scheduling()
             
-            room.checkTempPeriodically(myHouse.outsideTemp.getPreviousOutsideTemp,myHouse.outsideTemp.getCurrentOutsideTemp(),room.heatingPower)#what is our desired temp if no schedule 
+            room.checkTempPeriodically(myHouse.outsideTemp.getPreviousOutsideTemp,myHouse.outsideTemp.getCurrentOutsideTemp(),room.heaterPower)#what is our desired temp if no schedule 
         #myHouse.calculateMonthlyEnergy()
-        time.sleep(10)#wait 30 mins
+        time.sleep(5)#wait 30 mins
 
 # print the current external temperature
 # Print new room is added - print the room object

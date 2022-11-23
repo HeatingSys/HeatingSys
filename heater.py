@@ -55,6 +55,8 @@ class Thermostat:
     def temperatureSimulator(self, desiredTemp, previousOutsideTemp, currentOutsideTemp):
         # where t is time interval (30 minutes) and k is rate of change
         t = 30
+        k = 0.0035
+        a = 1
 
         # While the heater is on:
         if self.heaterState:
@@ -88,9 +90,9 @@ class Thermostat:
 
             # update currentTemp, aka insideTempHistory[0]
             # exponential heating formula: T(t) = Tc*e^((k-(Tc-To)/1000)*t)
-            # use insideTempHistory[2] bc array has been updated, so previous insideTemp is actually in position [2]
-            self.insideTempHistory[0] = self.insideTempHistory[2] * math.exp(
-                (k - (self.insideTempHistory[2] - currentOutsideTemp) / 10000) * t)
+            ## use insideTempHistory[2] bc array has been updated, so previous insideTemp is actually in position [2]
+            self.insideTempHistory[0] = self.insideTempHistory[1] * math.exp(
+                (k - (self.insideTempHistory[1] - currentOutsideTemp) // 10000) * t)
             # if currentTemp > desiredTemp, make currentTemp = desiredTemp
             if self.insideTempHistory[0] >= desiredTemp:
                 self.insideTempHistory[0] = desiredTemp

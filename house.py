@@ -10,14 +10,14 @@ class House:
         self.outsideTemp = OutsideTemp()
         self.defaultSchedule = Schedule()
 
-        self.heaterPower = None  # kWh of the heater provided by the user
-        self.monthlyEnergyLimit = None # user sets limit of energy kWh used in a month
+        self.heaterPower = 10  # kWh of the heater provided by the user
+        self.monthlyEnergyLimit = 400 # user sets limit of energy kWh used in a month
         self.monthlyEnergy = 0 # power used in month in kWh
         self.energyHoursGuage = 0 # how much longer (in hrs) heating be kept on based on current heater settings
         self.pastMonthStats = [None] * 12 # record of the last 12 months of stats
         self.lastMonthStatsPointer = -1 # points to the last month's stats 
-        self.defaultSchedule.addToSchedule('08:00',20,'12:00') #
-        self.defaultSchedule.addToSchedule('14:00',20,'16:00') #
+        self.defaultSchedule.addToSchedule('14:00',20,'15:00') #
+        self.defaultSchedule.addToSchedule('15:30',20,'16:00') #
         self.defaultSchedule.addToSchedule('17:00',20,'19:00') #
 
 
@@ -68,7 +68,7 @@ class House:
         self.rooms.append(roomToAdd)
         roomToAdd.defaultSchedule = self.defaultSchedule #should automatically give room the default 
         roomToAdd.checkNextSchedule()
-        roomToAdd.heatingPower = self.heatingPower
+        roomToAdd.heaterPower = self.heaterPower
         print("New room ",roomName,' added')
 
 
