@@ -124,11 +124,11 @@ room1.roomSchedule.addToSchedule('12:00',20,'12:00')
 room1.roomSchedule.addToSchedule('16:00', 14,'17:00')
 room1.defaultSchedule.addToSchedule('01:30',17,'04:00')
 room1.checkSchedule()
-'''
+
 
 room1 = Room(23, 'bedroom')
 room1.roomSchedule.addToSchedule('08:00',20,'12:00')
 room1.roomSchedule.addToSchedule('10:00',20,'12:00')
 room1.defaultSchedule.addToSchedule('09:00',20,'11:00')
 
-room1.checkNextSchedule()
+room1.checkNextSchedule()'''
