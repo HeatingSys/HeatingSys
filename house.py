@@ -81,7 +81,6 @@ class House:
         self.outsideTemp.setCurrentOutsideTemp()
 
 
-    
 
     """
     Leaving this here for now - will be handy when running our code fully

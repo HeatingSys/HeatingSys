@@ -41,8 +41,7 @@ class Room:
     def scheduling(self):
         if self.roomSchedule.scheduleOn:  # if schedule is on
             # first need to get info about the schedule
-            info = self.roomSchedule.schedule[
-                self.nextSchedule]  # this is single handedly the worst thing iv'e seen in my life#
+            info = self.roomSchedule.schedule[self.nextSchedule]  # this is single handedly the worst thing iv'e seen in my life#
             self.desiredTemp = info[0]
             self.thermomstat.getCurrentTemp() 
             #delete if - is there more?
@@ -74,12 +73,12 @@ class Room:
                     self.addDefaultToExistingSchedule()
         nextTime = int(self.nextSchedule[0] + self.nextSchedule[1])
 
-        timeInt = int(self.currentTime[0] +self.currentTime[1])
-        timeDif =nextTime - timeInt
+        timeInt = int(self.currentTime[0] + self.currentTime[1])
+        timeDif = nextTime - timeInt
         if timeDif <0:
             timeDif = timeDif *-1 
         for schedule in self.roomSchedule.schedule:
-            scheduleTime = int(schedule[0] +schedule[1])
+            scheduleTime = int(schedule[0] + schedule[1])
             if scheduleTime <= nextTime and timeInt <= scheduleTime and (scheduleTime-timeInt)<timeDif : #this doesn't account for a situation where its 11pm and the next schedule is at 8am
 
                 self.nextSchedule = schedule
@@ -119,4 +118,12 @@ room1.deleteEntireSchdule()
 room1.roomSchedule.addToSchedule('12:00',20,'12:00')
 room1.roomSchedule.addToSchedule('16:00', 14,'17:00')
 room1.defaultSchedule.addToSchedule('01:30',17,'04:00')
-room1.checkSchedule()'''
+room1.checkSchedule()
+
+
+room1 = Room(23, 'bedroom')
+room1.roomSchedule.addToSchedule('08:00',20,'12:00')
+room1.roomSchedule.addToSchedule('10:00',20,'12:00')
+room1.defaultSchedule.addToSchedule('09:00',20,'11:00')
+
+room1.checkNextSchedule()'''
