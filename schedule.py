@@ -26,6 +26,7 @@ class Schedule:
                 self.schedule[startTime] = scheduleList
             else:
                 self.schedule[startTime] = scheduleList
+                print(startTime,' added to Schedule')
     
     #the todelete should be starting time I guess 
     #*******not been tested yet 
