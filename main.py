@@ -7,6 +7,7 @@ from datetime import datetime
 def main():
     while True:
     # the House interface goes here
+
         print("Outside Temperature:",myHouse.outsideTemp.getCurrentOutsideTemp())
         #this can run every 30 mins 
         myHouse.checkOutsideTempPeriodically()
@@ -46,3 +47,4 @@ myHouse = House('24 bothar nua')
 myHouse.addNewRoom('bathroom')
 
 main() 
+
