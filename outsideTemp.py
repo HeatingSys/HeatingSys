@@ -33,10 +33,10 @@ class OutsideTemp:
 
     # Getter methods for outsideTemp
     def getCurrentOutsideTemp(self):
-        return self.outsideTempsForNext4Hours[self.index]
+        return round(self.outsideTempsForNext4Hours[self.index],2)
 
     def getPreviousOutsideTemp(self):
-        return self.outsideTempsForNext4Hours[self.index - 1]
+        return round(self.outsideTempsForNext4Hours[self.index - 1],2)
 
     # current temperature is an index var that's incremented each time its called in the outsideTemp array
     def setCurrentOutsideTemp(self):
