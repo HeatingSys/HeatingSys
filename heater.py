@@ -86,8 +86,7 @@ class Thermostat:
             # update currentTemp, aka insideTempHistory[0]
             # exponential heating formula: T(t) = Tc*e^((k-(Tc-To)/1000)*t)
             # use insideTempHistory[2] bc array has been updated, so previous insideTemp is actually in position [2]
-            self.insideTempHistory[0] = self.insideTempHistory[2] * math.exp(
-                (k - (self.insideTempHistory[2] - currentOutsideTemp) / 10000) * t)
+            self.insideTempHistory[0] = self.insideTempHistory[2] * math.exp((k - (self.insideTempHistory[2] - currentOutsideTemp) / 10000) * t)
             # if currentTemp > desiredTemp, make currentTemp = desiredTemp
             if self.insideTempHistory[0] >= desiredTemp:
                 self.insideTempHistory[0] = desiredTemp

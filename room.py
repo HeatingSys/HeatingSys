@@ -55,11 +55,11 @@ class Room:
     #this is called from house so no need for outside temp in roo, can pass vars in from house
     #This logically doesn't make sense to have
     #CHANGE NAME - NO LONGER FITS
-    def checkTempPeriodically(self, previousOutsideTemp, currentOutsideTemp, heaterPower):
+    def checkTempPeriodically(self, previousOutsideTemp, currentOutsideTemp):
         if self.heatingRunning:
-            self.thermomstat.heaterOn(previousOutsideTemp, currentOutsideTemp, heaterPower)
+            self.thermomstat.heaterOn(previousOutsideTemp, currentOutsideTemp, self.heatingPower)
         else:
-            self.thermomstat.heaterOff(previousOutsideTemp,currentOutsideTemp, heaterPower)
+            self.thermomstat.heaterOff(previousOutsideTemp,currentOutsideTemp, self.heatingPower)
             self.heatingRunning = False
 
 
