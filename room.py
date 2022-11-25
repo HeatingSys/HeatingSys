@@ -6,17 +6,18 @@ class Room:
     def __init__(self,name,outsideTemp):
         self.name =name
         self.automated = True #Is this what was previously our 'automated'? this is redundant its already in schedule
-        self.desiredTemp = 12 #should start out empty
-        self.currentTemp = 12 # we need to get our heater/thermostat class before being able to define this properly
+        self.desiredTemp = 12 #Chnage in nextSchedule
         self.heatingRunning = False #states whether heating is on now or nah
         self.nextSchedule ='23:00'
-        self.thermomstat = Thermostat(12)
         self.defaultSchedule = Schedule()#None #this is by default on can manually turn it off
         self.defaultScheduleState = True
         self.roomSchedule = Schedule()
         self.outsideTemp = outsideTemp
         self.heatingPower = None
         self.currentTime = datetime.now().strftime("%H:%M")
+        self.thermomstat = Thermostat(self.outsideTemp.getCurrentOutsideTemp())
+        self.currentTemp = self.thermomstat.getCurrentTemp() # we need to get our heater/thermostat class before being able to define this properly
+        
 
     #Can delete if you want but I physically can't /won't do it 
     def addDefaultToExistingSchedule(self):
@@ -47,17 +48,18 @@ class Room:
             #delete if - is there more?
             #so either we call erins temperatureSimulator here or else we call turn on heater now and from heater turn on the temperature simulator for now I'll do it here
             self.heatingRunning  = True
-            self.thermomstat.heaterOn(info[0],self.outsideTemp.getPreviousOutsideTemp,self.outsideTemp.getCurrentOutsideTemp,self.heatingPower)
-        
+            self.thermomstat.heaterOn(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp(),self.heatingPower)
+        #    def heaterOn(self, desiredTemp, previousOutsideTemp, currentOutsideTemp, heaterPower):
     #check every 30 mins for erins temp
     #this is called from house so no need for outside temp in roo, can pass vars in from house
     #This logically doesn't make sense to have
     #CHANGE NAME - NO LONGER FITS
-    def checkTempPeriodically(self, previousOutsideTemp, currentOutsideTemp):
+    def checkTempPeriodically(self):
         if self.heatingRunning:
-            self.thermomstat.heaterOn(previousOutsideTemp, currentOutsideTemp, self.heatingPower)
+            self.thermomstat.heaterOn(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp(),self.heatingPower)
         else:
-            self.thermomstat.heaterOff(previousOutsideTemp,currentOutsideTemp, self.heatingPower)
+            #   def heaterOff(self, desiredTemp, previousOutsideTemp, currentOutsideTemp):
+            self.thermomstat.heaterOff(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp())
             self.heatingRunning = False
 
     # need to modify this so that it doesn't just deal with hours but also minutes

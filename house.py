@@ -10,7 +10,7 @@ class House:
         self.outsideTemp = OutsideTemp()
         self.defaultSchedule = Schedule()
 
-        self.heaterPower = None  # kWh of the heater provided by the user
+        self.heatingPower = None  # kWh of the heater provided by the user
         self.monthlyEnergyLimit = None # user sets limit of energy kWh used in a month
         self.monthlyEnergy = 0 # power used in month in kWh
         self.energyHoursGuage = 0 # how much longer (in hrs) heating be kept on based on current heater settings
