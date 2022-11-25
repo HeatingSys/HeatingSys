@@ -101,3 +101,4 @@ myHouse.defaultSchedule.addToSchedule('17:00',20,'12:00')
 myHouse.defaultSchedule.addToSchedule('23:00',20,'12:00')
 myHouse.addNewRoom('bathroom')
 """
+
