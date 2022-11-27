@@ -3,18 +3,17 @@ from room import *
 from house import House
 from datetime import datetime
 
+global user_house
+user_house = House()
+
+global now
+now = datetime.now().strftime("%H:%M")
 
 def main():
     while True:
-    # the House interface goes here
-
-        print("Outside Temperature:",myHouse.outsideTemp.getCurrentOutsideTemp())
-        #this can run every 30 mins 
-        myHouse.checkOutsideTempPeriodically()
-        for room in myHouse.rooms:
-            #room.addToSchedule("16:20",'20','16:00')
-            room.getCurrentTemp()
-            now = datetime.now().strftime("%H:%M")
+        time.sleep(30)#wait 30 mins
+        user_house.checkOutsideTempPeriodically()
+        for room in user_house.rooms:
             current = int(now[3] + now[4])
             if current >30:
                 diff = current -30
@@ -29,26 +28,18 @@ def main():
                     room.scheduling()
             
             room.checkTempPeriodically()#what is our desired temp if no schedule 
-        #myHouse.calculateMonthlyEnergy()
-        time.sleep(3)#wait 30 mins
-
-# print the current external temperature
-# Print new room is added - print the room object
-# Print new schedule is added - print the schedule object
-    # To prove that the new room and schedule is definitely present in memory by printing the room id and all the schedules associated with it
-# Print current room temp of: eg room id 1
-# Then just print the inside temperature on each iteration - gotta show the inside temp of that room is changing thanks to maths we have
-
-
-
+        #user_house.calculateMonthlyEnergy() '''
 
 
 #have to set heating power in house
 
-
-global myHouse
-myHouse = House('24 bothar nua')
-myHouse.addNewRoom('bathroom')
-myHouse.rooms[0].addToSchedule("13:00",20,'16:00')
-myHouse.rooms[0].checkNextSchedule()
-main()
+'''user_house.addNewRoom(1)
+user_house.addNewRoom(2)
+user_house.getAllRooms()
+user_house.getRoom(1).addToSchedule("14:00",15,'16:00')
+user_house.getRoom(1).addToSchedule("10:00",20,'12:00')
+user_house.getRoom(1).addToSchedule("14:00",18,'14:02')
+user_house.getRoom(1).checkNextSchedule()
+user_house.deleteRoom(2)
+user_house.getAllRooms()
+main()'''

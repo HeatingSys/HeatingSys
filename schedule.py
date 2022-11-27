@@ -7,8 +7,9 @@ class Schedule:
 
     
     # method specifies when to kick in scheduled heating
-    def setUpSchedule(self,startTime,info):
+    def setUpSchedule(self, startTime,info):
         self.schedule[startTime] = info
+        print("( ", startTime, " ", info[1], " ", info[0] ,' ) added to Schedule')
 
     #from user persepective the user will initally try setup schedule and setUpSchedule should be called from inside here
     # So from the website perspective a user submits a form with startime , temp and endtime of the schedule and this method is called
@@ -26,7 +27,7 @@ class Schedule:
                 self.schedule[startTime] = scheduleList
             else:
                 self.schedule[startTime] = scheduleList
-                print(startTime,' added to Schedule')
+                print("( ", startTime, " ", endTime, " ", temp ,' ) added to Schedule')
     
     #the todelete should be starting time I guess 
     #*******not been tested yet 
