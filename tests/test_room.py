@@ -1,5 +1,7 @@
 import unittest
-from src.room import Room
+import sys
+sys.path.insert(0, "src")
+from room import Room
 
 class TestRoom(unittest.TestCase):
     def setUp(self):

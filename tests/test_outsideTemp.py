@@ -1,5 +1,7 @@
 import unittest
-from src.outsideTemp import OutsideTemp
+import sys
+sys.path.insert(0, "src")
+from outsideTemp import OutsideTemp
 
 class TestOutsideTemp(unittest.TestCase):
     def setUp(self):
