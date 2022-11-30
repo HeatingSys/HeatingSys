@@ -1,5 +1,5 @@
 import unittest
-from outsideTemp import OutsideTemp
+from src.outsideTemp import OutsideTemp
 
 class TestOutsideTemp(unittest.TestCase):
     def setUp(self):
