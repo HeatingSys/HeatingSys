@@ -49,7 +49,7 @@ class Room:
             #so either we call erins temperatureSimulator here or else we call turn on heater now and from heater turn on the temperature simulator for now I'll do it here
             self.heatingRunning  = True
             self.thermostat.heaterOn(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp(),self.heatingPower)
-        #    def heaterOn(self, desiredTemp, previousOutsideTemp, currentOutsideTemp, heaterPower):
+        
     #check every 30 mins for erins temp
     #this is called from house so no need for outside temp in roo, can pass vars in from house
     #This logically doesn't make sense to have
@@ -87,9 +87,35 @@ class Room:
                 timeDif = scheduleTime - timeInt
                 if timeDif < 0:
                     timeDif = timeDif * -1
-        if timeDif == 0:
-            # call to function to start the schdule
-            self.scheduling()
+
+    def endSchedule(self):
+        if self.heatingRunning is True:
+            endTime = self.roomSchedule.schedule[self.nextSchedule][1]
+            #self.heatingRunning = False
+            now = datetime.now().strftime("%H:%M")
+            current = int(now[3] + now[4])
+            diffSet = False
+            if current >30:
+                diffSet = True
+                if diff <10:
+                    diff = str('0'+ str(diff))
+                outOfRange = str(int(now[0] + now[1])+1) +':' +str(diff)
+                diff = True
+                diff = current -30
+                outOfRange = str(int(now[0] + now[1])+1) +':' +str(diff)
+            else:
+                outOfRange = now[0]+now[1]+':' +str(current +30)
+            if int(endTime[0] +endTime[1]) >= int(now[0]+now[1]) and int(endTime[0] +endTime[1]) <=int(outOfRange[0]+outOfRange[1]):
+                #room.scheduling()
+                if int(endTime[3] +endTime[4]) <= int(now[3]+now[4]) and int(endTime[3] +endTime[4]) <=int(outOfRange[0]+outOfRange[1]):
+                    #call scheduling 
+                    self.thermomstat.heaterOff(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp())
+                    self.heatingRunning = False
+                    self.checkNextSchedule()
+                elif int(endTime[3] +endTime[4]) <= int(now[3]+now[4]) and int(endTime[3] +endTime[4]) >=int(outOfRange[0]+outOfRange[1]) and diff is True:
+                    self.thermomstat.heaterOff(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp())
+                    self.heatingRunning = False
+                    self.checkNextSchedule()
 
 
 
@@ -115,6 +141,15 @@ class Room:
         self.currentTemp = self.thermostat.getCurrentTemp()
         #print("Current room Temp: ",self.currentTemp)
         return self.currentTemp
+        
+    def deleteOneEntry(self,startTime):
+        self.deleteFromSchedule(self,startTime)
+
+    def getDefaultSchedule(self):
+        return self.defaultSchedule
+
+    def getRoomSchedule(self):
+        return self.roomSchedule
 
 
 '''
