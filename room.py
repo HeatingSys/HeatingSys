@@ -3,12 +3,12 @@ from heater import Thermostat
 from schedule import Schedule
 
 class Room:
-    def __init__(self,name,outsideTemp):
-        self.name =name
+    def __init__(self,room_id,outsideTemp):
+        self.id = room_id
         self.automated = True #Is this what was previously our 'automated'? this is redundant its already in schedule
-        self.desiredTemp = 12 #Chnage in nextSchedule
+        self.desiredTemp = None 
         self.heatingRunning = False #states whether heating is on now or nah
-        self.nextSchedule ='23:00'
+        self.nextSchedule = '23:00'
         self.defaultSchedule = Schedule()#None #this is by default on can manually turn it off
         self.defaultScheduleState = True
         self.roomSchedule = Schedule()
@@ -107,12 +107,14 @@ class Room:
     def deleteEntireSchdule(self):
         self.roomSchedule = None
         self.roomSchedule = Schedule()
+
     def addToSchedule(self,startTime,desiredTemp, endTime):
         self.roomSchedule.addToSchedule(startTime,desiredTemp,endTime)
 
     def getCurrentTemp(self):
         self.currentTemp = self.thermomstat.getCurrentTemp()
-        print("Current room Temp: ",self.currentTemp)
+        #print("Current room Temp: ",self.currentTemp)
+        return self.currentTemp
 
 
 '''

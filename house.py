@@ -4,8 +4,7 @@ from outsideTemp import OutsideTemp
 
 
 class House:
-    def __init__(self,name):
-        self.name = name
+    def __init__(self):
         self.rooms = []
         self.outsideTemp = OutsideTemp()
         self.defaultSchedule = Schedule()
@@ -17,10 +16,23 @@ class House:
         self.pastMonthStats = [None] * 12 # record of the last 12 months of stats
         self.lastMonthStatsPointer = -1 # points to the last month's stats 
         self.defaultSchedule.addToSchedule('08:00',20,'12:00') #
-        self.defaultSchedule.addToSchedule('14:00',20,'16:00') #
+        self.defaultSchedule.addToSchedule('15:00',20,'15:15') #
         self.defaultSchedule.addToSchedule('17:00',20,'19:00') #
+    
+    def getRoom(self, room_id):
+        for room in self.rooms:
+            if room.id == room_id:
+                return room
+    
+    def deleteRoom(self, room_id):
+        room = self.getRoom(room_id)
+        self.rooms.remove(room)
+        print("removed!")
 
-
+    def getAllRooms(self):
+        for room in self.rooms:
+            print(room.id)
+            
     # called when user sets up monthly stats settings (user requirements ID 9-11)
     def setHeaterPower(self, power):
         self.heaterPower = power
@@ -44,8 +56,7 @@ class House:
             self.monthlyEnergy = energy # set new monthlyEnergyCounter
             # send a message to the user if energy guage is less than *** hours
             if self.energyHoursGuage <= 24:
-                return '24 hours left of heating before ' + self.name \
-                       + ' reaches monthly energy limit at current heating settings'
+                return '24 hours left of heating before reaching monthly energy limit at current heating settings'
 
     # needs to be called at end of month to reset monthly statistics and add last month's stats to stat array
     def setNewMonthEnergyStats(self):
@@ -60,16 +71,16 @@ class House:
         self.energyHoursGuage = 0 # reset guage to zero
 
     #should add room to house and also should do some of the setup of room
-    def addNewRoom(self, roomName):
+    def addNewRoom(self, room_id):
         for room in self.rooms:
-            if roomName == room.name:
+            if room_id == room.id:
                 return "Room already exists"
-        roomToAdd = Room(roomName,self.outsideTemp)#pass the object outside temp into 
+        roomToAdd = Room(room_id,self.outsideTemp)#pass the object outside temp into 
         self.rooms.append(roomToAdd)
         roomToAdd.defaultSchedule = self.defaultSchedule #should automatically give room the default 
-        roomToAdd.checkNextSchedule()
+        #roomToAdd.checkNextSchedule()
         roomToAdd.heatingPower = self.heatingPower
-        print("New room ",roomName,' added')
+        print("New room ",room_id,' added')
 
 
     #add to default schedule
