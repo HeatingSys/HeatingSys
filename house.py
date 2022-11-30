@@ -1,6 +1,7 @@
 from room import Room
 from schedule import Schedule
 from outsideTemp import OutsideTemp
+from datetime import datetime
 
 
 class House:
@@ -13,12 +14,14 @@ class House:
         self.monthlyEnergyLimit = None # user sets limit of energy kWh used in a month
         self.monthlyEnergy = 0 # power used in month in kWh
         self.energyHoursGuage = 0 # how much longer (in hrs) heating be kept on based on current heater settings
-        self.pastMonthStats = [None] * 12 # record of the last 12 months of stats
-        self.lastMonthStatsPointer = -1 # points to the last month's stats 
+        self.monthlyEnergyExceeded = False
+        self.pastMonthStats = {"January": None, "February": None, "March": None, "April": None, "May": None,
+                               "June": None, "July": None, "August": None, "September": None, "October": None,
+                               "November": None, "December": None}  # record of the last 12 months of stats
         self.defaultSchedule.addToSchedule('08:00',20,'12:00') #
         self.defaultSchedule.addToSchedule('15:00',20,'15:15') #
         self.defaultSchedule.addToSchedule('17:00',20,'19:00') #
-    
+
     def getRoom(self, room_id):
         for room in self.rooms:
             if room.id == room_id:
@@ -41,6 +44,19 @@ class House:
     def setMonthlyEnergyLimit(self, limit):
         self.monthlyEnergyLimit = limit
 
+    # getter methods for monthly stats
+    def getMonthlyEnergy(self):
+        return self.monthlyEnergy
+
+    def getEnergyHoursGuage(self):
+        return self.energyHoursGuage
+
+    def getMonthlyEnergyExceeded(self):
+        return self.monthlyEnergyExceeded
+
+    def getPastMonthStats(self):
+        return self.pastMonthStats
+
     # called every 30 minutes to calculate the total energy used and update the energy guage
     def calculateEnergyUse(self):
         if self.heaterPower is not None:
@@ -54,21 +70,19 @@ class House:
             else:
                 self.energyHoursGuage = energyLeft / currentEnergyUse # energy left (kWh) / how much energy we spend (kW) = hours left if continue as is
             self.monthlyEnergy = energy # set new monthlyEnergyCounter
-            # send a message to the user if energy guage is less than *** hours
-            if self.energyHoursGuage <= 24:
-                return '24 hours left of heating before reaching monthly energy limit at current heating settings'
+            if self.monthlyEnergy > self.monthlyEnergyLimit:
+                self.monthlyEnergyExceeded = True
 
     # needs to be called at end of month to reset monthly statistics and add last month's stats to stat array
     def setNewMonthEnergyStats(self):
-        if self.lastMonthStatsPointer == 11: # if at end of array, go back to zero
-            self.lastMonthStatsPointer = 0
-        else:
-            self.lastMonthStatsPointer = self.lastMonthStatsPointer + 1 # else just move pointer forward
-        self.pastMonthStats[self.lastMonthStatsPointer] = self.monthlyEnergy # and input last month's energy stats
+        pastMonth = datetime.now().strftime("%B")
+        self.pastMonthStats[pastMonth] = self.monthlyEnergy
         for room in self.rooms:
-            room.thermostat.currentEnergy = 0 # reset all room's energy stat to zero
-        self.monthlyEnergy = 0 # reset month energy stat to zero
-        self.energyHoursGuage = 0 # reset guage to zero
+            room.thermostat.currentEnergy = 0  # reset all room's energy stat to zero
+        self.monthlyEnergy = 0  # reset month energy stat to zero
+        self.energyHoursGuage = 0  # reset guage to zero
+        self.monthlyEnergyExceeded = False  # reset measure to False
+
 
     #should add room to house and also should do some of the setup of room
     def addNewRoom(self, room_id):
