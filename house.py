@@ -37,29 +37,44 @@ class House:
             print(room.id)
             
     # called when user sets up monthly stats settings (user requirements ID 9-11)
-    def setHeaterPower(self, power):
-        self.heaterPower = power
+    def setHeatingPower(self, power):
+        self.heatingPower = power
+
+        for room in self.rooms:
+            room.heatingPower = power
 
     # called when user sets up monthly stats settings (user requirements ID 9-11)
     def setMonthlyEnergyLimit(self, limit):
         self.monthlyEnergyLimit = limit
+    
+    def getMonthlyEnergyLimit(self):
+        return self.monthlyEnergyLimit
 
     # getter methods for monthly stats
     def getMonthlyEnergy(self):
-        return self.monthlyEnergy
+        if self.monthlyEnergy == 0:
+            return "No data yet"
+        else:
+            return self.monthlyEnergy
 
     def getEnergyHoursGuage(self):
-        return self.energyHoursGuage
+        if self.energyHoursGuage == 0:
+            return "No data yet"
+        else:
+            return self.energyHoursGuage
 
     def getMonthlyEnergyExceeded(self):
-        return self.monthlyEnergyExceeded
+        if self.monthlyEnergyExceeded is False:
+            return "Not exceeded"
+        else:
+            return "Exceeded"
 
     def getPastMonthStats(self):
         return self.pastMonthStats
 
     # called every 30 minutes to calculate the total energy used and update the energy guage
     def calculateEnergyUse(self):
-        if self.heaterPower is not None:
+        if self.heatingPower is not None:
             energy = 0
             for room in self.rooms:
                 energy = energy + room.thermostat.currentEnergy # energy = total current energy used this month for all rooms
@@ -74,7 +89,7 @@ class House:
                 self.monthlyEnergyExceeded = True
 
     # needs to be called at end of month to reset monthly statistics and add last month's stats to stat array
-    def setNewMonthEnergyStats(self):
+    def resetNewMonthEnergyStats(self):
         pastMonth = datetime.now().strftime("%B")
         self.pastMonthStats[pastMonth] = self.monthlyEnergy
         for room in self.rooms:
@@ -91,9 +106,9 @@ class House:
                 return "Room already exists"
         roomToAdd = Room(room_id,self.outsideTemp)#pass the object outside temp into 
         self.rooms.append(roomToAdd)
-        roomToAdd.defaultSchedule = self.defaultSchedule #should automatically give room the default 
-        #roomToAdd.checkNextSchedule()
+        roomToAdd.defaultSchedule = self.defaultSchedule #should automatically give room the default
         roomToAdd.heatingPower = self.heatingPower
+        #roomToAdd.checkNextSchedule()
         print("New room ",room_id,' added')
 
 

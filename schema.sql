@@ -3,8 +3,7 @@ DROP TABLE IF EXISTS rooms;
 CREATE TABLE rooms
 (
     room_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT,
-    automation BOOLEAN NOT NULL
+    name TEXT
 );
 
 DROP TABLE IF EXISTS schedules;

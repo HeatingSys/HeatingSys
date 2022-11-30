@@ -31,7 +31,7 @@ class TestRoom(unittest.TestCase):
 
     def test_checkTempPeriodically(self):
         temp = self.room1.checkTempPeriodically(18, 19, 25)
-        on = self.room1.thermomstat.heaterOn(20, 18, 19, 25)
+        on = self.room1.thermostat.heaterOn(20, 18, 19, 25)
         self.assertEqual(temp, on)
 
     def test_checkNextSchedule(self):

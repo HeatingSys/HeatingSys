@@ -15,8 +15,8 @@ class Room:
         self.outsideTemp = outsideTemp
         self.heatingPower = None
         self.currentTime = datetime.now().strftime("%H:%M")
-        self.thermomstat = Thermostat(self.outsideTemp.getCurrentOutsideTemp())
-        self.currentTemp = self.thermomstat.getCurrentTemp() # we need to get our heater/thermostat class before being able to define this properly
+        self.thermostat = Thermostat(self.outsideTemp.getCurrentOutsideTemp())
+        self.currentTemp = self.thermostat.getCurrentTemp() # we need to get our heater/thermostat class before being able to define this properly
         
 
     #Can delete if you want but I physically can't /won't do it 
@@ -44,11 +44,11 @@ class Room:
             # first need to get info about the schedule
             info = self.roomSchedule.schedule[self.nextSchedule]  # this is single handedly the worst thing iv'e seen in my life#
             self.desiredTemp = info[0]
-            self.thermomstat.getCurrentTemp() 
+            self.thermostat.getCurrentTemp() 
             #delete if - is there more?
             #so either we call erins temperatureSimulator here or else we call turn on heater now and from heater turn on the temperature simulator for now I'll do it here
             self.heatingRunning  = True
-            self.thermomstat.heaterOn(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp(),self.heatingPower)
+            self.thermostat.heaterOn(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp(),self.heatingPower)
         #    def heaterOn(self, desiredTemp, previousOutsideTemp, currentOutsideTemp, heaterPower):
     #check every 30 mins for erins temp
     #this is called from house so no need for outside temp in roo, can pass vars in from house
@@ -56,10 +56,10 @@ class Room:
     #CHANGE NAME - NO LONGER FITS
     def checkTempPeriodically(self):
         if self.heatingRunning:
-            self.thermomstat.heaterOn(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp(),self.heatingPower)
+            self.thermostat.heaterOn(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp(),self.heatingPower)
         else:
             #   def heaterOff(self, desiredTemp, previousOutsideTemp, currentOutsideTemp):
-            self.thermomstat.heaterOff(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp())
+            self.thermostat.heaterOff(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp())
             self.heatingRunning = False
 
     # need to modify this so that it doesn't just deal with hours but also minutes
@@ -94,7 +94,7 @@ class Room:
 
 
     def changeTempDirectly(self,desiredTemp, prevOutsideTemp,currentOutside):
-        self.thermomstat.turnOnHeater(desiredTemp,prevOutsideTemp,currentOutside ) # will call one of the temp functions here instead
+        self.thermostat.turnOnHeater(desiredTemp,prevOutsideTemp,currentOutside ) # will call one of the temp functions here instead
 
     def deleteDefaultSchedule(self):
         #want to delete the default but don't want to delete anything added by user 
@@ -112,7 +112,7 @@ class Room:
         self.roomSchedule.addToSchedule(startTime,desiredTemp,endTime)
 
     def getCurrentTemp(self):
-        self.currentTemp = self.thermomstat.getCurrentTemp()
+        self.currentTemp = self.thermostat.getCurrentTemp()
         #print("Current room Temp: ",self.currentTemp)
         return self.currentTemp
 
