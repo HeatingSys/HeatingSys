@@ -35,3 +35,8 @@ class Schedule:
             if key == todelete:
                 del self.schedule[key]
                 return
+'''
+schedule1 = Schedule()
+schedule1.addToSchedule('10:00', 23, '17:00')
+print(schedule1)
+'''

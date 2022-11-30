@@ -7,10 +7,12 @@ from datetime import datetime
 def main():
     while True:
     # the House interface goes here
+
         print("Outside Temperature:",myHouse.outsideTemp.getCurrentOutsideTemp())
         #this can run every 30 mins 
         myHouse.checkOutsideTempPeriodically()
         for room in myHouse.rooms:
+            room.endSchedule()
             #room.addToSchedule("16:20",'20','16:00')
             room.getCurrentTemp()
             now = datetime.now().strftime("%H:%M")
@@ -18,15 +20,17 @@ def main():
             if current >30:
                 diff = current -30
                 outOfRange = str(int(now[0] + now[1])+1) +':' +str(diff)
+                if (int(now[0] + now[1])+1) <10:
+                    outOfRange = now[0]+outOfRange[0] +outOfRange[2] +outOfRange[3]
             else:
                 outOfRange = now[0]+now[1]+':' +str(current +30)
             val1 =int(outOfRange[0]+outOfRange[1])
             if int(room.nextSchedule[0] +room.nextSchedule[1]) >= int(now[0]+now[1]) and int(room.nextSchedule[0] +room.nextSchedule[1]) <=int(outOfRange[0]+outOfRange[1]):
-                room.scheduling()
+                #room.scheduling()
                 if int(room.nextSchedule[3] +room.nextSchedule[4]) >= int(now[3]+now[4]) and int(room.nextSchedule[3] +room.nextSchedule[4]) <=int(outOfRange[0]+outOfRange[1]):
                     #call scheduling 
                     room.scheduling()
-            
+            room.endSchedule()
             room.checkTempPeriodically(myHouse.outsideTemp.getPreviousOutsideTemp,myHouse.outsideTemp.getCurrentOutsideTemp())#what is our desired temp if no schedule 
         #myHouse.calculateMonthlyEnergy()
         time.sleep(10)#wait 30 mins
@@ -48,6 +52,7 @@ def main():
 global myHouse
 myHouse = House('24 bothar nua')
 myHouse.addNewRoom('bathroom')
-myHouse.rooms[0].addToSchedule("16:20",'20','16:00')
+myHouse.rooms[0].addToSchedule("13:30",'20','13:34')
 
 main() 
+

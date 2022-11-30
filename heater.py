@@ -22,7 +22,8 @@ class Thermostat:
         self.heaterState = False  # Is heater on?  True = On and False = Off
         self.currentEnergy = 0  # energy spent in kWh
         self.windowState = False  # Is window open? True = opened
-        self.insideTempHistory = [currentOutsideTemp + 3] * 4 # when thermostat first made, history will just use outsideTemp
+        self.insideTempHistory = [
+                                     currentOutsideTemp + 3] * 4  # when thermostat first made, history will just use outsideTemp
 
     def getCurrentTemp(self):
         return self.insideTempHistory[0]
@@ -40,7 +41,9 @@ class Thermostat:
             self.heaterState = True
             self.temperatureSimulator(desiredTemp, previousOutsideTemp, currentOutsideTemp)  # will simulate next temp
             self.windowSimulator()  # will simulate the next window state
-            self.powerCalculator(desiredTemp, heaterPower)  # will calculate how much power is used
+            # if user inputted heaterPower, can calculate heater statistics
+            if heaterPower is not None:
+                self.powerCalculator(desiredTemp, heaterPower)  # will calculate how much power is used
 
     def heaterOff(self, desiredTemp, previousOutsideTemp, currentOutsideTemp):
         self.heaterState = False
@@ -146,8 +149,10 @@ class Thermostat:
                 # if its colder outside, currentTemp will go down until it reaches outsideTemp
                 # if its hotter outside, currentTemp will go up until it reaches outsideTemp
                 # use insideTempHistory[2] bc array was updated, so previous insideTemp is actually in position [2]
-                if ((currentOutsideTemp < self.insideTempHistory[2]) and (self.insideTempHistory[0] < currentOutsideTemp)) \
-                        or ((currentOutsideTemp > self.insideTempHistory[2]) and (self.insideTempHistory[0] > currentOutsideTemp)):
+                if ((currentOutsideTemp < self.insideTempHistory[2]) and (
+                        self.insideTempHistory[0] < currentOutsideTemp)) \
+                        or ((currentOutsideTemp > self.insideTempHistory[2]) and (
+                        self.insideTempHistory[0] > currentOutsideTemp)):
                     if self.windowState:  # if window is open, currentTemp = outsideTemp
                         self.insideTempHistory[0] = currentOutsideTemp
                     else:  # if window is close, currentTemp = outsideTemp + 3
