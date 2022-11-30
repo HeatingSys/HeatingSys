@@ -1,6 +1,6 @@
 import time
-from room import *
-from house import House
+from src.room import *
+from src.house import House
 from datetime import datetime
 
 global user_house
@@ -63,5 +63,4 @@ user_house.setHeatingPower(1500)
 user_house.setMonthlyEnergyLimit(50)
 
 main()
-
 '''
