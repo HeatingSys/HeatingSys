@@ -11,8 +11,9 @@ now = datetime.now().strftime("%H:%M")
 
 def main():
     while True:
-        time.sleep(30)#wait 30 mins
+        time.sleep(10)#wait 30 mins
         user_house.checkOutsideTempPeriodically()
+
         for room in user_house.rooms:
             current = int(now[3] + now[4])
             if current >30:
@@ -27,19 +28,40 @@ def main():
                     #call scheduling 
                     room.scheduling()
             
-            room.checkTempPeriodically()#what is our desired temp if no schedule 
-        #user_house.calculateMonthlyEnergy() '''
+            user_house.calculateEnergyUse()
+            
+            room.checkTempPeriodically()
+        
+        
+        '''current_usage = str(user_house.getMonthlyEnergy())
+        gauge = str(user_house.getEnergyHoursGuage())
+        exceeded = str(user_house.getMonthlyEnergyExceeded())
+        stats = str(user_house.getPastMonthStats())
+        limit = str(user_house.getMonthlyEnergyLimit())
+        print(current_usage, "current_usage")
+        print(gauge, "gauge")
+        print(exceeded, "exceeded")
+        print(stats, "stats")
+        print(limit, "limit")'''
+        
+        # reset
+        # user_house.resetNewMonthEnergyStats()
 
 
-#have to set heating power in house
-
-'''user_house.addNewRoom(1)
+'''
+user_house.addNewRoom(1)
 user_house.addNewRoom(2)
 user_house.getAllRooms()
-user_house.getRoom(1).addToSchedule("14:00",15,'16:00')
+user_house.getRoom(1).addToSchedule("15:00",30,'16:00')
 user_house.getRoom(1).addToSchedule("10:00",20,'12:00')
-user_house.getRoom(1).addToSchedule("14:00",18,'14:02')
+
+
+
 user_house.getRoom(1).checkNextSchedule()
-user_house.deleteRoom(2)
-user_house.getAllRooms()
-main()'''
+
+user_house.setHeatingPower(1500)
+user_house.setMonthlyEnergyLimit(50)
+
+main()
+
+'''

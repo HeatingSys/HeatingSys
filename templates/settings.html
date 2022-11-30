@@ -1,5 +1,40 @@
 {% extends "base.html" %}
 
 {% block main_content %}
-    <h1> Bruv the settings </h1>
+    <h1> Settings </h1>
+    <p> 
+        Limit the user set : {{ limit }} <br>
+        Power used so far this month : {{ current_usage }} <br>
+        Gauge : {{ gauge }} <br>
+        Has the monthly limit been exceeded? {{ exceeded }} <br>
+        Stats for the year <br> {{ stats }}
+    </p>
+    <form action="" method="post" novalidate> 
+        {{ form.hidden_tag() }}
+    
+        {{ form.heatingAppliancePower.label }}
+        {{ form.heatingAppliancePower() }}
+        {% for error in form.heatingAppliancePower.errors %}
+            {{ error }}
+        {% endfor %}
+        <br>
+        {{ form.energyLimit.label }}
+        {{ form.energyLimit() }}
+        {% for error in form.energyLimit.errors %}
+            {{ error }}
+        {% endfor %}
+        <br>
+        {{ form.submit(class="submit") }}
+    </form>  
+
+     <div class="flash">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p> {{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>    
+
 {% endblock %}

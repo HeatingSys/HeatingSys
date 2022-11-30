@@ -1,11 +1,9 @@
 from flask import Flask, render_template, redirect, url_for, session, g, flash, Markup, request, make_response
-from forms import RoomForm, ScheduleForm
+from forms import RoomForm, ScheduleForm, SettingForm
 from database import get_db, close_db
 from flask_session import Session
-from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from functools import wraps
-from random import sample
 from itertools import * 
 from main import *
 from threading import *
@@ -41,9 +39,25 @@ def terms():
     return render_template("terms_con.html", title="Terms and Conditions")
 
 # Settings page
-@app.route("/settings")
+@app.route("/settings", methods=["GET", "POST"])
 def settings():
-    return render_template("settings.html", title="Settings")
+    form = SettingForm()
+    if form.validate_on_submit():
+        heatingAppliancePower = form.heatingAppliancePower.data
+        energyLimit = form.energyLimit.data
+
+        user_house.setHeatingPower(int(heatingAppliancePower))
+        user_house.setMonthlyEnergyLimit(int(energyLimit))
+        
+        flash ("Settings updated!") 
+        return redirect(url_for("settings"))
+    else:
+        current_usage = str(user_house.getMonthlyEnergy())
+        gauge = str(user_house.getEnergyHoursGuage())
+        exceeded = str(user_house.getMonthlyEnergyExceeded())
+        stats = str(user_house.getPastMonthStats())
+        limit = str(user_house.getMonthlyEnergyLimit())
+    return render_template("settings.html", title="Settings", current_usage=current_usage,gauge=gauge,stats=stats, limit=limit, form=form)
 
 # Profile page
 @app.route("/profile")
@@ -57,11 +71,10 @@ def house():
     rooms = None
     db = get_db()
     if form.validate_on_submit():
-        automation = form.automation.data
         name = form.name.data
         
-        db.execute("""INSERT INTO rooms (name, automation)
-                        VALUES (?,?);""", (name, automation))
+        db.execute("""INSERT INTO rooms (name)
+                        VALUES (?);""", (name,))
         db.commit()
         
         rooms = db.execute("""SELECT * FROM rooms WHERE room_id in 
@@ -82,10 +95,9 @@ def edit_room(id):
     room = None
     db = get_db()
     if form.validate_on_submit():
-        automation = form.automation.data
         name = form.name.data
         
-        db.execute("""UPDATE rooms SET name=?, automation=? WHERE room_id=?;""", (name, automation, id))
+        db.execute("""UPDATE rooms SET name=? WHERE room_id=?;""", (name, id))
         db.commit()
         
         flash ("Room successfully updated!") 

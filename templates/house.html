@@ -14,12 +14,6 @@
             {{ error }}
         {% endfor %}
         <br>
-        {{ form.automation.label }}
-        {{ form.automation() }}
-        {% for error in form.automation.errors %}
-            {{ error }}
-        {% endfor %}
-        <br>
         {{ form.submit(class="submit") }}
     </form>  
 
