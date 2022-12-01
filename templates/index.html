@@ -1,10 +1,15 @@
 {% extends "base.html" %}
 
 {% block main_content %}
-    <h1> Hello </h1>
-    <h2> Welcome to ‘insert project name’, where our mission is to help you save energy </h2>
-    
-    <h4> Take a quick tour of how our solution works </h4>
-    <h4> pretend i have a pic here</h4>
+    <h1> Energy Efficient Heating System </h1>
+    <p> A simple user interface with default energy-efficient settings is implemented to increase accessibility 
+        and reduce overall energy consumption of heating systems. The default settings are programmed so that users
+         can enjoy comfortable temperatures when they are at home, and when residents are sleeping or absent from 
+         the house, temperatures are decreased to reduce heating costs. <br>
+         This website allows a user to set up preferred schedules throughout the day so that heaters will automatically switch on in specific
+         rooms at desired temperatures. On the website, users can remotely monitor and manually adjust temperatures no matter where they are. 
+         Additionally, a thermostat observes the temperature in each room to provide real-time temperature data to the user. 
+         All these features combine to create a user-friendly, energy-efficient heating control system that can provide sustainable improvements for Irish residents</p> 
 
+    <p> Add a room to get started! <a href="{{ ( url_for('house') ) }}"> Go to your House </a> </p>
 {% endblock %}

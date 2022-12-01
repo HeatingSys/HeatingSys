@@ -69,8 +69,6 @@ class Room:
 
     #shouldn't need to check for minutes anymore - system enforces schedule must be 1 hour diff at least
     def checkNextSchedule(self):
-        #find next most recent schdule
-        
         if self.defaultScheduleState is True:
             for time in self.defaultSchedule.schedule:
                 if self.roomSchedule is None or time not in self.roomSchedule.schedule:
@@ -99,30 +97,24 @@ class Room:
             diffSet = False
             if current >30:
                 diffSet = True
-                if diff <10:
-                    diff = str('0'+ str(diff))
-                outOfRange = str(int(now[0] + now[1])+1) +':' +str(diff)
-                diff = True
                 diff = current -30
+                if diff < 10:
+                    diff = str('0'+ str(diff))
                 outOfRange = str(int(now[0] + now[1])+1) +':' +str(diff)
             else:
                 outOfRange = now[0]+now[1]+':' +str(current +30)
             if int(endTime[0] +endTime[1]) >= int(now[0]+now[1]) and int(endTime[0] +endTime[1]) <=int(outOfRange[0]+outOfRange[1]):
-                #room.scheduling()
                 if int(endTime[3] +endTime[4]) <= int(now[3]+now[4]) and int(endTime[3] +endTime[4]) <=int(outOfRange[0]+outOfRange[1]):
-                    #call scheduling 
-                    self.thermomstat.heaterOff(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp())
+                    self.thermostat.heaterOff(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp())
                     self.heatingRunning = False
                     self.checkNextSchedule()
                 elif int(endTime[3] +endTime[4]) <= int(now[3]+now[4]) and int(endTime[3] +endTime[4]) >=int(outOfRange[0]+outOfRange[1]) and diff is True:
-                    self.thermomstat.heaterOff(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp())
+                    self.thermostat.heaterOff(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp())
                     self.heatingRunning = False
                     self.checkNextSchedule()
 
-
-
     def changeTempDirectly(self,desiredTemp, prevOutsideTemp,currentOutside):
-        self.thermostat.turnOnHeater(desiredTemp,prevOutsideTemp,currentOutside ) # will call one of the temp functions here instead
+        self.thermostat.turnOnHeater(desiredTemp,prevOutsideTemp,currentOutside)
 
     def deleteDefaultSchedule(self):
         #want to delete the default but don't want to delete anything added by user 
@@ -148,27 +140,7 @@ class Room:
         self.deleteFromSchedule(self,startTime)
 
     def getDefaultSchedule(self):
-        return self.defaultSchedule
+        return self.defaultSchedule.schedule
 
     def getRoomSchedule(self):
-        return self.roomSchedule
-
-
-'''
-room1 = Room(23,'emmasRoom')
-room1.roomSchedule.addToSchedule('08:00',20,'12:00')
-room1.roomSchedule.addToSchedule('10:00',20,'12:00')
-room1.roomSchedule.deleteFromSchedule('10:00')
-room1.deleteEntireSchdule()
-room1.roomSchedule.addToSchedule('12:00',20,'12:00')
-room1.roomSchedule.addToSchedule('16:00', 14,'17:00')
-room1.defaultSchedule.addToSchedule('01:30',17,'04:00')
-room1.checkSchedule()
-
-
-room1 = Room(23, 'bedroom')
-room1.roomSchedule.addToSchedule('08:00',20,'12:00')
-room1.roomSchedule.addToSchedule('10:00',20,'12:00')
-room1.defaultSchedule.addToSchedule('09:00',20,'11:00')
-
-room1.checkNextSchedule()'''
+        return self.roomSchedule.schedule

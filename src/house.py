@@ -20,9 +20,9 @@ class House:
         self.pastMonthStats = {"January": None, "February": None, "March": None, "April": None, "May": None,
                                "June": None, "July": None, "August": None, "September": None, "October": None,
                                "November": None, "December": None}  # record of the last 12 months of stats
-        self.defaultSchedule.addToSchedule('11:00',25,'12:00') #
-        self.defaultSchedule.addToSchedule('15:00',20,'15:15') #
-        self.defaultSchedule.addToSchedule('17:00',20,'19:00') #
+        self.defaultSchedule.addToSchedule('00:00',15,'06:59')
+        self.defaultSchedule.addToSchedule('07:00',21,'09:00')
+        self.defaultSchedule.addToSchedule('17:00',22,'22:00')
 
     def getRoom(self, room_id):
         for room in self.rooms:
@@ -32,7 +32,6 @@ class House:
     def deleteRoom(self, room_id):
         room = self.getRoom(room_id)
         self.rooms.remove(room)
-        print("removed!")
 
     def getAllRooms(self):
         for room in self.rooms:
@@ -121,26 +120,3 @@ class House:
     #call outside temp class 
     def checkOutsideTempPeriodically(self):
         self.outsideTemp.setCurrentOutsideTemp()
-
-
-
-    """
-    Leaving this here for now - will be handy when running our code fully
-            # leng is length of interval in seconds
-    # times is how many times the loop repeats
-        schedule.every(leng).seconds.do(self.check_temp) # every _ second check current temperature & adjust heater
-        schedule.every().day.at("11:47").do(self.turn_on_low_heating()) # time to switch to green  heating
-        schedule.every().day.at("11:47:10").do(self.turn_off_low_heating()) # time to switch to regular heating
-        for i in range(times + 1):
-            schedule.run_pending()
-            time.sleep(1)  # exits the scheduling method once range is reached
-    """
-"""
-myHouse = House('myhouse')
-myHouse.defaultSchedule.addToSchedule('08:00',20,'12:00')
-myHouse.defaultSchedule.addToSchedule('14:00',20,'12:00')
-myHouse.defaultSchedule.addToSchedule('17:00',20,'12:00')
-myHouse.defaultSchedule.addToSchedule('23:00',20,'12:00')
-myHouse.addNewRoom('bathroom')
-"""
-

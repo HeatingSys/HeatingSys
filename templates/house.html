@@ -39,7 +39,6 @@
         {% for entry in rooms %}
         <tr> 
             <td> {{ entry["name"] }} </td>
-            <td> {{ entry["automation"] }} </td>
             <td> <a href="{{ url_for('room', id=entry['room_id']) }}"> Room Details </a> </td>
             <td> <a href="{{ url_for('edit_room', id=entry['room_id']) }}"> Edit </a> </td> 
             <td> <a href="{{ url_for('delete_room', id=entry['room_id']) }}"> Delete </a> </td>

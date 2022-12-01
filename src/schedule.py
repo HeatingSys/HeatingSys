@@ -1,19 +1,12 @@
-#I'm separating this from room for now - I think it's just cleaner and doesn't bloat room
-# open to changing this back - shouldn't be a big deal to change back
 class Schedule:
     def __init__(self) -> None:
         self.schedule = {}
         self.scheduleOn = True
 
-    
     # method specifies when to kick in scheduled heating
     def setUpSchedule(self, startTime,info):
         self.schedule[startTime] = info
-        print("( ", startTime, " ", info[1], " ", info[0] ,' ) added to Schedule')
 
-    #from user persepective the user will initally try setup schedule and setUpSchedule should be called from inside here
-    # So from the website perspective a user submits a form with startime , temp and endtime of the schedule and this method is called
-    # regardless of whether self.schedule is empty yet or 
     #*******WHEN ADDING TO SCHEDULE WOULD BE NICE TO CALL THE CHECKNEXTSCHEDULE AFTER ADDING TO THIS
     def addToSchedule(self,startTime,temp,endTime): #could have an override true or false that could be an optional input 
         scheduleList = [temp,endTime]
@@ -27,17 +20,10 @@ class Schedule:
                 self.schedule[startTime] = scheduleList
             else:
                 self.schedule[startTime] = scheduleList
-                print("( ", startTime, " ", endTime, " ", temp ,' ) added to Schedule')
     
-    #the todelete should be starting time I guess 
-    #*******not been tested yet 
-    def deleteFromSchedule(self,todelete):
+    # Deletes Schedule Object From Schedule Dictionary 
+    def deleteFromSchedule(self, start_time_key):
         for key in self.schedule:
-            if key == todelete:
-                del self.schedule[key]
-                return
-'''
-schedule1 = Schedule()
-schedule1.addToSchedule('10:00', 23, '17:00')
-print(schedule1)
-'''
+            if key == start_time_key:
+                del self.schedule[start_time_key]
+                return "success"

@@ -3,7 +3,6 @@ from forms import RoomForm, ScheduleForm, SettingForm
 from database import get_db, close_db
 from flask_session import Session
 from datetime import datetime
-from functools import wraps
 from itertools import * 
 from main import *
 from threading import *
@@ -33,14 +32,9 @@ def index():
     db = get_db()
     return render_template("index.html", title="Home", now=now)
 
-# Shows terms and conditions
-@app.route("/terms")
-def terms():
-    return render_template("terms_con.html", title="Terms and Conditions")
-
-# Settings page
-@app.route("/settings", methods=["GET", "POST"])
-def settings():
+# Statistics page
+@app.route("/statistics", methods=["GET", "POST"])
+def statistics():
     form = SettingForm()
     if form.validate_on_submit():
         heatingAppliancePower = form.heatingAppliancePower.data
@@ -50,19 +44,14 @@ def settings():
         user_house.setMonthlyEnergyLimit(int(energyLimit))
         
         flash ("Settings updated!") 
-        return redirect(url_for("settings"))
+        return redirect(url_for("statistics"))
     else:
         current_usage = str(user_house.getMonthlyEnergy())
         gauge = str(user_house.getEnergyHoursGuage())
         exceeded = str(user_house.getMonthlyEnergyExceeded())
-        stats = str(user_house.getPastMonthStats())
+        stats = user_house.getPastMonthStats()
         limit = str(user_house.getMonthlyEnergyLimit())
-    return render_template("settings.html", title="Settings", current_usage=current_usage,gauge=gauge,stats=stats, limit=limit, form=form)
-
-# Profile page
-@app.route("/profile")
-def profile():
-    return render_template("profile.html", title="My Profile")
+    return render_template("statistics.html", title="Statistics", current_usage=current_usage,gauge=gauge,stats=stats, limit=limit, exceeded=exceeded, form=form)
 
 # House page
 @app.route("/house", methods=["GET", "POST"])
@@ -73,8 +62,7 @@ def house():
     if form.validate_on_submit():
         name = form.name.data
         
-        db.execute("""INSERT INTO rooms (name)
-                        VALUES (?);""", (name,))
+        db.execute("""INSERT INTO rooms (name) VALUES (?);""", (name,))
         db.commit()
         
         rooms = db.execute("""SELECT * FROM rooms WHERE room_id in 
@@ -82,11 +70,42 @@ def house():
 
         user_house.addNewRoom(int(rooms["room_id"]))
 
-        flash ("Room successfully created! Add scheduling times below!") 
+        flash ("Room successfully created! Add your scheduling times below!") 
         return redirect(url_for("room", id=rooms["room_id"]))
     else:
         rooms = db.execute("""SELECT * FROM rooms;""").fetchall()
     return render_template("house.html", form=form, title="Home", rooms=rooms, now=now, outdoor_temp=outdoor_temp)
+
+# Room Page
+@app.route("/room/<int:id>", methods=["GET", "POST"])
+def room(id):
+    form = ScheduleForm()
+    schedule = None
+    db = get_db()
+    room_id = id
+    room = None
+    if form.validate_on_submit():
+        desiredTemp = form.desiredTemp.data
+        startTime = form.startTime.data
+        endTime = form.endTime.data
+
+        schedules = user_house.getRoom(room_id).getRoomSchedule()
+
+        for key in schedules.keys():
+            if startTime >= key and endTime <= schedules[key][1]:
+                flash ('ERROR: Start and end time should not overlap with any current schedules')
+                return redirect(url_for("room", id=room_id))
+            
+        user_house.getRoom(room_id).addToSchedule(str(startTime),int(desiredTemp),str(endTime))
+        flash ("Schedule successfully added!")
+        return redirect(url_for("room", id=room_id))
+    else:
+        room = db.execute("""SELECT * FROM rooms WHERE room_id=?;""", (room_id,)).fetchone()
+        user_house.getRoom(room_id).checkNextSchedule()
+        room_temp = user_house.getRoom(room_id).getCurrentTemp()
+        heater_state = user_house.getRoom(room_id).heatingRunning
+        schedules = user_house.getRoom(room_id).getRoomSchedule() # get all user-provided + default schedules for that room
+    return render_template("room.html", title="Room", room_id=room_id, schedules=schedules, form=form, room=room, now=now, room_temp=room_temp, heater_state=heater_state)
 
 # Edit Room page
 @app.route("/edit_room/<int:id>", methods=["GET", "POST"])
@@ -118,42 +137,10 @@ def delete_room(id):
     flash ("Room deleted!")
     return redirect(url_for("house"))
 
-# Room Page
-@app.route("/room/<int:id>", methods=["GET", "POST"])
-def room(id):
-    form = ScheduleForm()
-    schedule = None
-    db = get_db()
-    room_id = id
-    room = None
-    if form.validate_on_submit():
-        desiredTemp = form.desiredTemp.data
-        startTime = form.startTime.data
-        endTime = form.endTime.data
-        
-        db.execute("""INSERT INTO schedules (room_id, desired_temp, start_time, end_time)
-                        VALUES (?,?,?,?);""", (room_id, desiredTemp, startTime, endTime))
-        db.commit()
-
-        user_house.getRoom(room_id).addToSchedule(str(startTime),int(desiredTemp),str(endTime))
-        
-        flash ("Schedule successfully added!")
-        return redirect(url_for("room", id=room_id))
-    else:
-        schedule = db.execute("""SELECT * FROM schedules WHERE room_id=?;""", (room_id,)).fetchall()
-        room = db.execute("""SELECT * FROM rooms WHERE room_id=?;""", (room_id,)).fetchone()
-        user_house.getRoom(room_id).checkNextSchedule()
-        room_temp = user_house.getRoom(room_id).getCurrentTemp()
-        heater_state = user_house.getRoom(room_id).heatingRunning
-    return render_template("room.html", title="Room", schedule=schedule, form=form, room=room, now=now, room_temp=room_temp, heater_state=heater_state)
-
 # Deletes Schedule
-@app.route("/delete_schedule/<int:id>")
-def delete_schedule(id):
-    db = get_db()
-    room_id =  db.execute("""SELECT room_id FROM schedules WHERE schedule_id=?;""", (id,)).fetchone()
-    db.execute("""DELETE FROM schedules WHERE schedule_id=?;""", (id,)).fetchone()
-    db.commit()
+@app.route("/delete_schedule/<int:room_id>/<key>")
+def delete_schedule(room_id, key):
+    user_house.getRoom(room_id).roomSchedule.deleteFromSchedule(str(key))
     flash ("Schedule deleted!")
     return redirect(url_for("room", id=int(room_id)))
 
@@ -161,11 +148,8 @@ def runApp():
     app.run(debug=True, use_reloader=False, port=5000, host='0.0.0.0')
 
 if __name__ == '__main__':
-    #app.run(debug = True)
     try:
-        print('start first thread')
         t1 = Thread(target=runApp).start()
-        print('start second thread')
         t2 = Thread(target=main).start()
     except Exception as e:
         print("Unexpected error:" + str(e))
