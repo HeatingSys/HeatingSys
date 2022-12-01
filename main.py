@@ -56,7 +56,7 @@ def main():
         # user_house.resetNewMonthEnergyStats()
 
 
-'''
+
 user_house.addNewRoom(1)
 user_house.addNewRoom(2)
 user_house.getAllRooms()
@@ -71,4 +71,3 @@ user_house.setHeatingPower(1500)
 user_house.setMonthlyEnergyLimit(50)
 
 main()
-'''

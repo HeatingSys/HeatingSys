@@ -1,6 +1,8 @@
-from src.room import Room
-from src.schedule import Schedule
-from src.outsideTemp import OutsideTemp
+import sys
+sys.path.insert(0, "src")
+from room import Room
+from schedule import Schedule
+from outsideTemp import OutsideTemp
 from datetime import datetime
 
 
@@ -18,7 +20,7 @@ class House:
         self.pastMonthStats = {"January": None, "February": None, "March": None, "April": None, "May": None,
                                "June": None, "July": None, "August": None, "September": None, "October": None,
                                "November": None, "December": None}  # record of the last 12 months of stats
-        self.defaultSchedule.addToSchedule('08:00',20,'12:00') #
+        self.defaultSchedule.addToSchedule('11:00',25,'12:00') #
         self.defaultSchedule.addToSchedule('15:00',20,'15:15') #
         self.defaultSchedule.addToSchedule('17:00',20,'19:00') #
 

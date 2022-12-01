@@ -1,6 +1,7 @@
 import unittest
-from src.schedule import Schedule
-
+import sys
+sys.path.insert(0, "src")
+from schedule import Schedule
 
 class TestSchedule(unittest.TestCase):
     def setUp(self):

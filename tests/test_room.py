@@ -1,9 +1,16 @@
 import unittest
-from src.room import Room
+import sys
+sys.path.insert(0, "src")
+from room import Room
+from heater import Thermostat
+from schedule import Schedule
+from house import House
 
 class TestRoom(unittest.TestCase):
+    user_house = House()
+
     def setUp(self):
-        self.room1 = Room('bedroom1', 17)
+        self.room1 = Room(1,17)
         self.room1.roomSchedule.addToSchedule('10:00', 23, '17:00')
         self.room1.roomSchedule.addToSchedule('09:00', 23, '15:00')
 
