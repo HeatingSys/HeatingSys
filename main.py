@@ -11,7 +11,7 @@ now = datetime.now().strftime("%H:%M")
 
 def main():
     while True:
-        time.sleep(1)#wait 30 mins
+        time.sleep(10)#wait 30 mins
         user_house.checkOutsideTempPeriodically()
 
         for room in user_house.rooms:
@@ -33,7 +33,7 @@ def main():
             room.checkTempPeriodically()
         
         
-        current_usage = str(user_house.getMonthlyEnergy())
+        '''current_usage = str(user_house.getMonthlyEnergy())
         gauge = str(user_house.getEnergyHoursGuage())
         exceeded = str(user_house.getMonthlyEnergyExceeded())
         stats = str(user_house.getPastMonthStats())
@@ -42,18 +42,18 @@ def main():
         print(gauge, "gauge")
         print(exceeded, "exceeded")
         print(stats, "stats")
-        print(limit, "limit")
+        print(limit, "limit")'''
         
         # reset
         # user_house.resetNewMonthEnergyStats()
 
 
-
+'''
 user_house.addNewRoom(1)
 user_house.addNewRoom(2)
 user_house.getAllRooms()
-#user_house.getRoom(1).addToSchedule("15:00",30,'16:00')
-#user_house.getRoom(1).addToSchedule("10:00",20,'12:00')
+user_house.getRoom(1).addToSchedule("15:00",30,'16:00')
+user_house.getRoom(1).addToSchedule("10:00",20,'12:00')
 
 
 
@@ -63,3 +63,4 @@ user_house.setHeatingPower(1500)
 user_house.setMonthlyEnergyLimit(50)
 
 main()
+'''
