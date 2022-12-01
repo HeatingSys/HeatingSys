@@ -4,7 +4,6 @@ sys.path.insert(0, "src")
 from room import Room
 from heater import Thermostat
 from schedule import Schedule
-from outsideTemp import OutsideTemp
 
 class TestRoom(unittest.TestCase):
     def setUp(self):
