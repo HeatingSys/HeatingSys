@@ -1,6 +1,8 @@
-from src.room import Room
-from src.schedule import Schedule
-from src.outsideTemp import OutsideTemp
+import sys
+sys.path.insert(0, "src")
+from room import Room
+from schedule import Schedule
+from outsideTemp import OutsideTemp
 from datetime import datetime
 
 
