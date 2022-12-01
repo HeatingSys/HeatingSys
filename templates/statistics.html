@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+    <h1> Statistics </h1>
+    <p> To make this feature available, you must provide two pieces of information:
+        the power of your heating appliance, and the monthly energy limit you want to enforce 
+        (we will let you know if you have exceeded your limit or not!)
+    </p>
+
+    <form action="" method="post" novalidate> 
+        {{ form.hidden_tag() }}
+    
+        {{ form.heatingAppliancePower.label }}
+        {{ form.heatingAppliancePower() }}
+        {% for error in form.heatingAppliancePower.errors %}
+            {{ error }}
+        {% endfor %}
+        <br>
+        {{ form.energyLimit.label }}
+        {{ form.energyLimit() }}
+        {% for error in form.energyLimit.errors %}
+            {{ error }}
+        {% endfor %}
+        <br>
+        {{ form.submit(class="submit") }}
+    </form>  
+
+     <div class="flash">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p> {{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>    
+
+    <p> 
+        Limit the user set (in kwh) : {{ limit }} <br>
+        Power used so far this month (in kwh) : {{ current_usage }} <br>
+        Gauge (shows the amount of hours you have remaining to leave the heating on): {{ gauge }} <br>
+        Has the monthly limit been exceeded? {{ exceeded }} <br>
+    </p>
+
+    <table>
+        <caption> Statistics For The Past Month </caption>
+        <tr>
+            <th> Month </th>
+            <th> Energy Used </th>
+        </tr>
+        {% for key in stats.keys() %}
+        <tr> 
+            <td> {{ key }} </td>
+            <td> {{ stats[key] }} </td>
+        </tr>
+        {% endfor %}
+    </table>  
+
+{% endblock %}

@@ -41,7 +41,6 @@
         {{ form.submit(class="submit") }}
     </form>
 
-    {% if schedule %}
     <table>
         <caption> Schedules </caption>
         <tr>
@@ -52,18 +51,14 @@
             <th> </th>
         </tr>
 
-        {% for entry in schedule %}
+        {% for key in schedules.keys() %}
         <tr> 
-            <td> {{ entry["desired_temp"] }} </td>
-            <td> {{ entry["start_time"] }} </td>
-            <td> {{ entry["end_time"] }} </td>
-            <td> <a href="{{ url_for('delete_schedule', id=entry['schedule_id']) }}"> Delete </a> </td>
+            <td> {{ schedules[key][0] }} </td>
+            <td> {{ key }} </td>
+            <td> {{ schedules[key][1] }} </td>
+            <td> <a href="{{ url_for('delete_schedule', room_id=room_id, key=key) }}"> Delete </a> </td>
         </tr>
         {% endfor %}
-
-        {% else %}
-        <p> Default settings will be applied to your heating system as you have not added any schedules </p> 
-        {% endif %}
     </table>  
     
 {% endblock %}

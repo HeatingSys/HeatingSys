@@ -11,15 +11,15 @@ now = datetime.now().strftime("%H:%M")
 
 def main():
     while True:
-        time.sleep(10)#wait 30 mins
+        time.sleep(5)
         user_house.checkOutsideTempPeriodically()
 
         for room in user_house.rooms:
             current = int(now[3] + now[4])
             diffSet = False
-            if current >30:
-                diff = current -30
-                if diff <10:
+            if current > 30:
+                diff = current - 30
+                if diff < 10:
                     diff = str('0'+ str(diff))
                 outOfRange = str(int(now[0] + now[1])+1) +':' +str(diff)
                 diffSet = True
@@ -37,37 +37,42 @@ def main():
                 room.endSchedule()
             
             user_house.calculateEnergyUse()
-            
             room.checkTempPeriodically()
         
-        
-        '''current_usage = str(user_house.getMonthlyEnergy())
+        ''' Testing
+        current_usage = str(user_house.getMonthlyEnergy())
         gauge = str(user_house.getEnergyHoursGuage())
         exceeded = str(user_house.getMonthlyEnergyExceeded())
         stats = str(user_house.getPastMonthStats())
         limit = str(user_house.getMonthlyEnergyLimit())
         print(current_usage, "current_usage")
         print(gauge, "gauge")
-        print(exceeded, "exceeded")
+        print(exceeded, "- exceeded or not?")
         print(stats, "stats")
-        print(limit, "limit")'''
+        print(limit, "limit")
+        room_temp = str(user_house.getRoom(1).getCurrentTemp())
+        heater_state = str(user_house.getRoom(1).heatingRunning)
+        print(room_temp, " - room_temp")
+        print(heater_state, "- heater_state")
+        '''
         
-        # reset
-        # user_house.resetNewMonthEnergyStats()
+        # reset all energy calculating variables on the 1st of every month
+        today = datetime.today().strftime('%d')
+        if today == '01':
+            user_house.resetNewMonthEnergyStats()
 
-
-
+''' Testing
 user_house.addNewRoom(1)
-user_house.addNewRoom(2)
+#user_house.addNewRoom(2)
 user_house.getAllRooms()
-user_house.getRoom(1).addToSchedule("15:00",30,'16:00')
-user_house.getRoom(1).addToSchedule("10:00",20,'12:00')
 
+#self.defaultSchedule.addToSchedule('00:00',15,'06:59')
+#self.defaultSchedule.addToSchedule('07:00',21,'09:00')
+#self.defaultSchedule.addToSchedule('17:00',22,'22:00')
 
+#user_house.getRoom(1).addToSchedule("10:00",20,'12:00')
 
 user_house.getRoom(1).checkNextSchedule()
 
-user_house.setHeatingPower(1500)
-user_house.setMonthlyEnergyLimit(50)
-
-main()
+#main()
+'''
