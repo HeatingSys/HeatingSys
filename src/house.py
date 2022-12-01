@@ -18,7 +18,7 @@ class House:
         self.pastMonthStats = {"January": None, "February": None, "March": None, "April": None, "May": None,
                                "June": None, "July": None, "August": None, "September": None, "October": None,
                                "November": None, "December": None}  # record of the last 12 months of stats
-        self.defaultSchedule.addToSchedule('08:00',20,'12:00') #
+        self.defaultSchedule.addToSchedule('11:00',25,'12:00') #
         self.defaultSchedule.addToSchedule('15:00',20,'15:15') #
         self.defaultSchedule.addToSchedule('17:00',20,'19:00') #
 

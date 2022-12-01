@@ -1,6 +1,8 @@
 from datetime import datetime
-from src.heater import Thermostat
-from src.schedule import Schedule
+import sys
+sys.path.insert(0, "src")
+from heater import Thermostat
+from schedule import Schedule
 
 class Room:
     def __init__(self,room_id,outsideTemp):
