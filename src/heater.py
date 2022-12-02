@@ -24,12 +24,15 @@ class Thermostat:
         self.windowState = False  # Is window open? True = opened
         self.insideTempHistory = [currentOutsideTemp + 3] * 4  # when thermostat first made, history will just use outsideTemp
 
+    def getHeaterState(self):
+        return self.heaterState
 
     def getCurrentTemp(self):
         return round(self.insideTempHistory[0],2)
 
     # Room class will call either turnOnHeater or turnOffHeater every 30 minutes
     def heaterOn(self, desiredTemp, previousOutsideTemp, currentOutsideTemp, heaterPower):
+        heaterState = False
         # if currentTemp > desiredTemp, heater should not go on
         if self.insideTempHistory[0] > float(desiredTemp):
             self.heaterState = False

@@ -29,7 +29,6 @@ def main():
             if room.heatingRunning is False:
                 if int(room.nextSchedule[0] +room.nextSchedule[1]) >= int(now[0]+now[1]) and int(room.nextSchedule[0] +room.nextSchedule[1]) <=int(outOfRange[0]+outOfRange[1]):
                     if int(room.nextSchedule[3] +room.nextSchedule[4]) <= int(now[3]+now[4]) and int(room.nextSchedule[3] +room.nextSchedule[4]) <=int(outOfRange[0]+outOfRange[1]):
-                        #call scheduling 
                         room.scheduling()
                     elif int(room.nextSchedule[3] +room.nextSchedule[4]) <= int(now[3]+now[4]) and int(room.nextSchedule[3] +room.nextSchedule[4]) >=int(outOfRange[0]+outOfRange[1]) and diffSet is True:
                         room.scheduling()
@@ -50,6 +49,7 @@ def main():
         print(exceeded, "- exceeded or not?")
         print(stats, "stats")
         print(limit, "limit")
+        
         room_temp = str(user_house.getRoom(1).getCurrentTemp())
         heater_state = str(user_house.getRoom(1).heatingRunning)
         print(room_temp, " - room_temp")
@@ -61,7 +61,7 @@ def main():
         if today == '01':
             user_house.resetNewMonthEnergyStats()
 
-''' Testing
+'''
 user_house.addNewRoom(1)
 #user_house.addNewRoom(2)
 user_house.getAllRooms()
@@ -70,9 +70,13 @@ user_house.getAllRooms()
 #self.defaultSchedule.addToSchedule('07:00',21,'09:00')
 #self.defaultSchedule.addToSchedule('17:00',22,'22:00')
 
-#user_house.getRoom(1).addToSchedule("10:00",20,'12:00')
-
+user_house.getRoom(1).addToSchedule("21:00",20,'21:47')
+user_house.getRoom(1).addToSchedule("21:48",20,'21:49')
 user_house.getRoom(1).checkNextSchedule()
 
+user_house.getRoom(1).defaultSchedule.addToSchedule('09:30', 20, '16:00')
+user_house.getRoom(1).addDefaultToExistingSchedule()
+s = user_house.getRoom(1).getRoomSchedule()
+print(s)
 #main()
 '''

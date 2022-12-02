@@ -99,7 +99,6 @@ class House:
         self.energyHoursGuage = 0  # reset guage to zero
         self.monthlyEnergyExceeded = False  # reset measure to False
 
-
     #should add room to house and also should do some of the setup of room
     def addNewRoom(self, room_id):
         for room in self.rooms:
@@ -109,9 +108,6 @@ class House:
         self.rooms.append(roomToAdd)
         roomToAdd.defaultSchedule = self.defaultSchedule #should automatically give room the default
         roomToAdd.heatingPower = self.heatingPower
-        #roomToAdd.checkNextSchedule()
-        print("New room ",room_id,' added')
-
 
     #add to default schedule
     def addToDefault(self, startTime, desiredTemp, endTime):
