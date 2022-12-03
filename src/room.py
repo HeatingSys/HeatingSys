@@ -91,24 +91,23 @@ class Room:
     def endSchedule(self):
         if self.heatingRunning is True:
             endTime = self.roomSchedule.schedule[self.nextSchedule][1]
-            #self.heatingRunning = False
             now = datetime.now().strftime("%H:%M")
             current = int(now[3] + now[4])
             diffSet = False
-            if current >30:
-                diffSet = True
+            if current > 30:
                 diff = current -30
                 if diff < 10:
                     diff = str('0'+ str(diff))
                 outOfRange = str(int(now[0] + now[1])+1) +':' +str(diff)
+                diffSet = True
             else:
-                outOfRange = now[0]+now[1]+':' +str(current +30)
+                outOfRange = now[0] + now[1] + ':' +str(current +30)
             if int(endTime[0] +endTime[1]) >= int(now[0]+now[1]) and int(endTime[0] +endTime[1]) <=int(outOfRange[0]+outOfRange[1]):
                 if int(endTime[3] +endTime[4]) <= int(now[3]+now[4]) and int(endTime[3] +endTime[4]) <=int(outOfRange[0]+outOfRange[1]):
                     self.thermostat.heaterOff(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp())
                     self.heatingRunning = False
                     self.checkNextSchedule()
-                elif int(endTime[3] +endTime[4]) <= int(now[3]+now[4]) and int(endTime[3] +endTime[4]) >=int(outOfRange[0]+outOfRange[1]) and diff is True:
+                elif int(endTime[3] +endTime[4]) <= int(now[3]+now[4]) and int(endTime[3] +endTime[4]) >=int(outOfRange[0]+outOfRange[1]) and diffSet is True:
                     self.thermostat.heaterOff(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp())
                     self.heatingRunning = False
                     self.checkNextSchedule()
