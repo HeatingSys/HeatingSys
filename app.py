@@ -97,6 +97,7 @@ def room(id):
                 return redirect(url_for("room", id=room_id))
             
         user_house.getRoom(room_id).addToSchedule(str(startTime),int(desiredTemp),str(endTime))
+        user_house.getRoom(room_id).checkNextSchedule()
         flash ("Schedule successfully added!")
         return redirect(url_for("room", id=room_id))
     else:

@@ -9,8 +9,8 @@ class Room:
         self.id = room_id
         self.automated = True #Is this what was previously our 'automated'? this is redundant its already in schedule
         self.desiredTemp = None 
-        self.heatingRunning = False #states whether heating is on now or nah
-        self.nextSchedule = '23:00'
+        self.heatingRunning = False
+        self.nextSchedule = '07:00'
         self.defaultSchedule = Schedule()#None #this is by default on can manually turn it off
         self.defaultScheduleState = True
         self.roomSchedule = Schedule()
@@ -38,9 +38,9 @@ class Room:
             self.thermostat.getCurrentTemp() 
             #delete if - is there more?
             #so either we call erins temperatureSimulator here or else we call turn on heater now and from heater turn on the temperature simulator for now I'll do it here
+            self.heatingRunning  = True
             self.thermostat.heaterOn(self.desiredTemp,self.outsideTemp.getPreviousOutsideTemp(),self.outsideTemp.getCurrentOutsideTemp(),self.heatingPower)
-            if self.thermostat.getHeaterState() is True:
-                self.heatingRunning  = True
+            
 
     #check every 30 mins for erins temp
     #this is called from house so no need for outside temp in roo, can pass vars in from house
@@ -114,6 +114,7 @@ class Room:
         return self.defaultSchedule.schedule
     
     def defaultSchedulingOnly(self):
+        self.deleteEntireSchdule()
         self.addDefaultToExistingSchedule()
 
     def turnOffScheduling(self):

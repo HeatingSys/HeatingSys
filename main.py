@@ -38,7 +38,7 @@ def main():
             user_house.calculateEnergyUse()
             room.checkTempPeriodically()
         
-        ''' Testing
+        
         current_usage = str(user_house.getMonthlyEnergy())
         gauge = str(user_house.getEnergyHoursGuage())
         exceeded = str(user_house.getMonthlyEnergyExceeded())
@@ -54,29 +54,21 @@ def main():
         heater_state = str(user_house.getRoom(1).heatingRunning)
         print(room_temp, " - room_temp")
         print(heater_state, "- heater_state")
-        '''
+        
         
         # reset all energy calculating variables on the 1st of every month
         today = datetime.today().strftime('%d')
         if today == '01':
             user_house.resetNewMonthEnergyStats()
 
-'''
+
 user_house.addNewRoom(1)
-#user_house.addNewRoom(2)
-user_house.getAllRooms()
 
 #self.defaultSchedule.addToSchedule('00:00',15,'06:59')
 #self.defaultSchedule.addToSchedule('07:00',21,'09:00')
 #self.defaultSchedule.addToSchedule('17:00',22,'22:00')
 
-user_house.getRoom(1).addToSchedule("21:00",20,'21:47')
-user_house.getRoom(1).addToSchedule("21:48",20,'21:49')
+user_house.getRoom(1).addToSchedule("12:00",20,"12:45")
 user_house.getRoom(1).checkNextSchedule()
 
-user_house.getRoom(1).defaultSchedule.addToSchedule('09:30', 20, '16:00')
-user_house.getRoom(1).addDefaultToExistingSchedule()
-s = user_house.getRoom(1).getRoomSchedule()
-print(s)
-#main()
-'''
+main()
