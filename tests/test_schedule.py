@@ -13,11 +13,8 @@ class TestSchedule(unittest.TestCase):
         self.schedule1.addToSchedule('10:00', 23, '17:00')
         self.assertEqual(self.schedule1.schedule, {'10:00':[23, '17:00']})
 
-        self.schedule1.addToSchedule('09:00', 23, '16:00')
-        self.assertEqual(self.schedule1.schedule, {'10:00':[23, '17:00'], '09:00':[23, '16:00']})
-
-        self.schedule1.addToSchedule('16:00', -15, '17:00')
-        self.assertEqual(self.schedule1.schedule, {'10:00':[23, '17:00'], '09:00':[23, '16:00'], '16:00':[-15, '17:00']})
+        self.schedule1.addToSchedule('09:00', -5, '16:00')
+        self.assertEqual(self.schedule1.schedule, {'10:00':[23, '17:00'], '09:00':[-5, '16:00']})
 
     def test_deleteFromSchedule(self):
         self.schedule1.addToSchedule('10:00', 23, '17:00')
