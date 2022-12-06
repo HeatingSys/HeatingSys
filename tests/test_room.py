@@ -1,10 +1,10 @@
 import unittest
 import sys
 sys.path.insert(0, "src")
-from src.room import Room
-from src.heater import Thermostat
-from src.schedule import Schedule
-from src.house import House
+from room import Room
+from heater import Thermostat
+from schedule import Schedule
+from house import House
 
 class TestRoom(unittest.TestCase):
     def setUp(self):
