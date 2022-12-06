@@ -182,9 +182,6 @@ class Thermostat:
         moreEnergy = 1.1
         lessEnergy = 0.9
 
-        # idk if there should be an if statement here that says if self.heaterState = True
-        # or if this method is called while the heater is on and therefore will be in some other loop....
-
         # first, if desiredTemp is increasing the heat by a lot it will take more energy (around 10% extra power)
         if (desiredTemp - self.insideTempHistory[0]) > 5:
             self.currentEnergy = self.currentEnergy + (kWh / 2) * moreEnergy

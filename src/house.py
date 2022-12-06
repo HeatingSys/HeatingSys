@@ -1,3 +1,14 @@
+#############
+# house file contains:
+#   - House class
+#       - House class contains:
+#           - Method that deletes a room
+#           - Getter and Setter methods for all the rooms in the house
+#           - Method that calculates the energy use
+#           - Method to reset energy stats at the end of the month
+#           - Method to add a new room to the house
+##############
+
 import sys
 sys.path.insert(0, "src")
 from room import Room
@@ -24,15 +35,18 @@ class House:
         self.defaultSchedule.addToSchedule('07:00',21,'09:00')
         self.defaultSchedule.addToSchedule('17:00',22,'22:00')
 
+    # returns a room in the house
     def getRoom(self, room_id):
         for room in self.rooms:
             if room.id == room_id:
                 return room
     
+    # deletes a room from the house
     def deleteRoom(self, room_id):
         room = self.getRoom(room_id)
         self.rooms.remove(room)
 
+    # gets all the rooms in the house
     def getAllRooms(self):
         for room in self.rooms:
             print(room.id)
@@ -47,7 +61,8 @@ class House:
     # called when user sets up monthly stats settings (user requirements ID 9-11)
     def setMonthlyEnergyLimit(self, limit):
         self.monthlyEnergyLimit = limit
-    
+
+    # retuns the monthy energy limit set
     def getMonthlyEnergyLimit(self):
         return self.monthlyEnergyLimit
 
@@ -58,18 +73,21 @@ class House:
         else:
             return self.monthlyEnergy
 
+    # getter method which returns the hourly energy consumed
     def getEnergyHoursGuage(self):
         if self.energyHoursGuage == 0:
             return "No data yet"
         else:
             return self.energyHoursGuage
 
+    # checks if the energy consumption has exceeded that which was set
     def getMonthlyEnergyExceeded(self):
         if self.monthlyEnergyExceeded is False:
             return "Not exceeded"
         else:
             return "Exceeded"
 
+    # gets previous months stats
     def getPastMonthStats(self):
         return self.pastMonthStats
 

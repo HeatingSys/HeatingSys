@@ -17,11 +17,11 @@ class TestOutsideTemp(unittest.TestCase):
         self.assertIn(prevTemp, self.outside.outsideTempsForNext4Hours)
         self.assertEqual(prevTemp, self.outside.outsideTempsForNext4Hours[self.outside.index - 1])
 
-    def test_setCurrentOutsideTemp(self):
-        pass
-
     def test_generateOutsideTempForFourHours(self):
-        pass
+        outsideTemp1 = self.outside.generateOutsideTempForFourHours()
+        self.assertEqual(outsideTemp1, self.outside.generateOutsideTempForFourHours())
+        self.assertTrue(self.outside.index != 0)
+
 
         
 

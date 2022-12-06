@@ -1,27 +1,35 @@
+#############
+# schedule file contains:
+#   - Schedule class
+#       - should be one for each room
+#       - Schedule class contains:
+#           - Method that sets up a schedule
+#           - Method that adds to a schedule
+#           - Method that deletes from a schedule
+##############
+
 class Schedule:
     def __init__(self) -> None:
-        self.schedule = {}
-        self.scheduleOn = True
+        self.schedule = {} # schedule is stored as a dictionary
+        self.scheduleOn = True # has the schedule started? True = Yes, False = No
 
-    # method specifies when to kick in scheduled heating
+    # Specifies when to kick in scheduled heating
     def setUpSchedule(self, startTime,info):
-        self.schedule[startTime] = info
+        self.schedule[startTime] = info # key = startTime, value = schedule information
 
-    #*******WHEN ADDING TO SCHEDULE WOULD BE NICE TO CALL THE CHECKNEXTSCHEDULE AFTER ADDING TO THIS
-    def addToSchedule(self,startTime,temp,endTime): #could have an override true or false that could be an optional input 
+    # Adds to a schedule, gets passed in the start time, temperatur and end time
+    def addToSchedule(self,startTime,temp,endTime):
         scheduleList = [temp,endTime]
         if len(self.schedule) ==0:
-            return self.setUpSchedule(startTime,scheduleList)#do we even need a separate method for this ?? - it's better in theory but stupid in practice
+            return self.setUpSchedule(startTime,scheduleList)
         else:
-            #the time should be a string
+            # the time should be a string
             if startTime in self.schedule:
-                #clash, for now we'll override this automatically
-                #could add here ability to throw the option to user whether to overide or not - come back later on
                 self.schedule[startTime] = scheduleList
             else:
                 self.schedule[startTime] = scheduleList
     
-    # Deletes Schedule Object From Schedule Dictionary 
+    # Deletes Schedule Object from Schedule Dictionary 
     def deleteFromSchedule(self, start_time_key):
         for key in self.schedule:
             if key == start_time_key:
